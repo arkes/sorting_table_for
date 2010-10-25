@@ -1,0 +1,205 @@
+# SortingTableFor
+
+## Introduction
+
+SortingTableFor is a Rails TableBuilder made to easily create table or sort a table. The syntax is simple to write and easy to read.
+
+## Infos
+
+- It's Rails 2.3 and 3 compatible
+- I18n compatible
+- Almost fully configurable
+
+## Installation
+
+Install with git
+
+    cd your_rails_app
+    cd vendor/plugins
+    git clone git://github.com/arkownz/sorting_table_for.git
+
+## Usage
+
+To create a simple table
+
+    <%- sorting_table_for @users do |table| %>
+      <%= table.headers %>
+      <%= table.columns %>
+    <%- end %>
+
+will render
+
+    <table>
+      <thead>
+        <tr>
+          <th><a href='/to_sort'>Username</a></th>
+          <th><a href='/to_sort'>Firstname</a></th>
+          <th>Edit</th>
+          <th>Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Test</td>
+          <td>Myname</td>
+          <td><a href='/to_edit'>Edit</a></td>
+          <td><a hred='/to_delete'>Delete</a></td>
+        <tr>
+      </tbody>
+    </table>
+
+You can specify columns and headers
+
+    <%- sorting_table_for @users do |table| %>
+      <%= table.headers :username, :firstname, :lastname %>
+      <%= table.columns :username, :firstname, :lastname %>
+    <%- end %>
+
+On columns you can get the object of your collection.
+Your can pass to column or header what ever your want: symbol, string, image, ...
+
+    <%- sorting_table_for @users do |table| %>
+      <%= table.headers do %>
+        <%= table.header :username %>
+        <%= table.header :firstname %>
+        <%= table.header image_tag('rails.png') %>
+      <%- end %>
+      <%= table.columns do |user| %>
+        <%= table.column :username %>
+        <%= table.column user.firstname %>
+        <%= table.column 'exemple' %>
+      <%- end %>
+    <%- end %>
+    
+For more control on headers or columns
+
+    <%- sorting_table_for @users do |table| %>
+      <%= table.headers do %>
+        <%= table.header do %>
+          <%= image_tag('rails.png') %>
+        <%- end %>
+      <%- end %>
+      <%= table.columns do |val| %>
+        <%= table.column do %>
+          <%= val.username.downcase %>
+        <%- end %>
+      <%- end %>
+    <%- end %>
+
+By default SortingTableFor will customize your table
+
+Header:
+
+- On symbol it make by default a sorting
+- On symbol it will add the translation (I18n.t)
+- On sorting it will add a class with an image to show the sort order
+
+Column:
+
+- On Symbol it will find the value in collection
+- On Object Date or DateTime it will add the localization (I18n.l)
+- On Column name (price, total_price, ...) it will the currency
+- On Boolean it will add the translation (I18n.t) true or false
+
+You can customize the table
+
+    <%- sorting_table_for @users do |table| %>
+      <%= table.headers do %>
+        <%= table.header :username %>
+        <%= table.header :price, :sort => false %>
+        <%= table.header :created_at %>
+        <%= table.header 'today' %>
+      <%- end %>
+      <%= table.columns do |user| %>
+        <%= table.column user.username %>
+        <%= table.column user.price, :as => :currency %>
+        <%= table.column user.created, :as => :date %>
+        <%= table.column DateTime.now, :as => :datetime, :format => :short %>
+      <%- end %>
+    <%- end %>
+
+You can customize the table with action
+
+    <%- sorting_table_for @users do |table| %>
+      <%= table.headers do %>
+        <%= table.header :username %>
+        <%= table.header :action => :edit %>
+      <%- end %>
+      <%= table.columns do |user| %>
+        <%= table.column user.username, :action => :show %>
+        <%= table.column :action => :edit %>
+      <%- end %>
+    <%- end %>
+
+You can customize the html and add title
+
+    <%- sorting_table_for @users, :html => { :class => 'my_table' } do |table| %>
+      <%= table.headers :html => { :class => 'my_headers', :title => 'column !' } do %>
+        <%= table.header :username :html => { :class => 'header_username' } %>
+        <%= table.header :firstname :html => { :title => 'hello price' } %>
+      <%- end %>
+      <%= table.columns :html => { :class => 'my_columns' } do |user| %>
+        <%= table.column :username :html => { :class => 'column_username' }%>
+        <%= table.column :firstname :html => { :title => "it's #{val.firstname}" } %>
+      <%- end %>
+    <%- end %>
+
+## Namespace
+
+SortingTableFor can use your namespace
+
+    <%- sorting_table_for [:admin, @users] do |table| %>
+      <%= table.headers %>
+      <%= table.columns %>
+    <%- end %>
+
+## Sorting
+
+To add sorting in your query, you just have to add sorting_table in your query
+
+    def index
+      @users = User.sorting_table(params).all
+    end
+
+to add a default sorting 
+
+    def index
+      @users = User.sorting_table(params, :username).all
+    end
+
+    -- or --
+    
+    def index
+      @users = User.sorting_table(params, :username, :desc).all
+    end
+
+## Ajax
+
+You can add ajax on sorting
+
+        <%- sorting_table_for @users, :sort_remote => true do |table| %>
+          <%= table.headers %>
+          <%= table.columns %>
+        <%- end %>
+
+You can add ajax on links
+
+        <%- sorting_table_for @users, :link_remote => true do |table| %>
+            <%= table.headers %>
+            <%= table.columns %>
+        <%- end %>
+
+## Stylesheet
+
+there are a default stylesheet in _stylesheet_
+
+- A class 'odd' or 'even' on rows
+- A class 'cur-sort-not', 'cur-sort-asc' or 'cur-sort-desc' on headers that you want to sort
+
+## Configurations
+
+There are some options that you can customize in your initiatilizer
+
+_see the initializer file exemple for more explanation_
+  
+Copyright (c) 2010 arkownz (tom), released under the MIT license

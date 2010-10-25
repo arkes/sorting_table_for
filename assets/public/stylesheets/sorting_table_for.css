@@ -1,0 +1,12 @@
+table.sorting_table_for { background-color: #BCBAB6; width: 100%; font-size: 12px; }
+table.sorting_table_for thead tr th { background-color: #F0CFAD; text-align: left; color: black; padding: 4px; }
+table.sorting_table_for thead tr th a { color: black; cursor: pointer; display: block; width: 100%; height: 100%; }
+table.sorting_table_for thead tr th a:hover { text-decoration: underline; }
+table.sorting_table_for thead tr th.cur-sort-not { background: #F0CFAD url('/images/sorting_table_for/bullet_black.png') no-repeat right; }
+table.sorting_table_for thead tr th.cur-sort-asc { background: #F0CFAD url('/images/sorting_table_for/bullet_arrow_down.png') no-repeat right; }
+table.sorting_table_for thead tr th.cur-sort-desc { background: #F0CFAD url('/images/sorting_table_for/bullet_arrow_up.png') no-repeat right; }
+table.sorting_table_for tbody tr.odd { background-color: #8FF1F4; }
+table.sorting_table_for tbody tr.even { background-color: white; }
+table.sorting_table_for tbody tr.total-entries { background-color: white; }
+table.sorting_table_for tbody tr td { padding: 4px; text-align: center; }
+table.sorting_table_for tbody tr td a { color: black; cursor: pointer; display: block; width: 100%; height: 100%; }
