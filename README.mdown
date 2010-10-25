@@ -40,10 +40,13 @@ will render
       </thead>
       <tbody>
         <tr>
+          <td colspan='4'>Total rows : 1</td>
+        </tr>
+        <tr>
           <td>Test</td>
           <td>Myname</td>
           <td><a href='/to_edit'>Edit</a></td>
-          <td><a hred='/to_delete'>Delete</a></td>
+          <td><a href='/to_delete'>Delete</a></td>
         <tr>
       </tbody>
     </table>
