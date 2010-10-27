@@ -34,11 +34,7 @@ module SortingTableFor
       @lines = []
     end
     
-    ##
     ##  Headers
-    ##
-    ##
-    ##
     
     def headers(*args, &block)
       column_options, html_options = get_column_and_html_options( args.extract_options! )
@@ -61,11 +57,7 @@ module SortingTableFor
       nil
     end
     
-    ##
     ##  Columns
-    ##
-    ##
-    ##
     
     def columns(*args, &block)
       column_options, html_options = get_column_and_html_options( args.extract_options! )
