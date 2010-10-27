@@ -91,11 +91,15 @@ module SortingTableFor
       nil
     end
     
-    ##
-    ## Render
-    ##
-    ##
+    protected
     
+    # This function is a copy from Formtastic: http://github.com/justinfrench/formtastic
+    def model_name(object)
+      object.present? ? object.class.name : object.to_s.classify
+    end
+    
+    private
+
     def render_thead
       if @header_line
         return Tools::html_safe(content_tag(:thead, @header_line.render_line))
@@ -109,15 +113,6 @@ module SortingTableFor
       end
       ''
     end
-    
-    protected
-    
-    # This function is a copy from Formtastic: http://github.com/justinfrench/formtastic
-    def model_name(object)
-      object.present? ? object.class.name : object.to_s.classify
-    end
-    
-    private
     
     def set_default_global_options
       @@options[:sort] = true unless @@options.has_key? :sort
