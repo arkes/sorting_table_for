@@ -1,7 +1,11 @@
 class User < ActiveRecord::Base
-  
-  named_scope :good_position, :conditions => 'position > 3'
-  named_scope :set_limit, lambda { |limit| { :limit => limit } }
+  if ::SortingTableFor::Tools::rails3?
+    scope :good_position, :conditions => 'position > 3'
+    scope :set_limit, lambda { |limit| { :limit => limit } }
+  else
+    named_scope :good_position, :conditions => 'position > 3'
+    named_scope :set_limit, lambda { |limit| { :limit => limit } }
+  end
   
 end
 

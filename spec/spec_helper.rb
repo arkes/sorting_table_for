@@ -1,11 +1,18 @@
 require 'rubygems'
-require 'spec'
 
 begin
   require File.dirname(__FILE__) + '/../../../../spec/spec_helper'
 rescue LoadError
   puts "You need to install rspec in your base app"
   exit
+end
+
+puts "Launching spec for Rails #{Rails.version}"
+
+if ::SortingTableFor::Tools::rails3?
+  RSpec.configure do |config|
+    config.include Webrat::Matchers, :type => :views 
+  end
 end
 
 ##
@@ -27,7 +34,11 @@ end
 ## Load I18n locales
 ##
 
-I18n.load_path = Dir[File.join(File.expand_path(File.dirname(__FILE__)), 'locales', '*.yml')]
+if ::SortingTableFor::Tools::rails3?
+  I18n.load_path = Dir[File.join(File.expand_path(File.dirname(__FILE__)), 'locales', 'test_rails3.yml')]
+else
+  I18n.load_path = Dir[File.join(File.expand_path(File.dirname(__FILE__)), 'locales', 'test.yml')]
+end
 I18n.locale = :test
 I18n.default_locale = :test
 
@@ -42,7 +53,18 @@ require File.join(File.dirname(__FILE__), '..', 'init.rb')
 ##
 
 module SortingTableForSpecHelper
-  
+  include ActiveSupport
   include SortingTableFor
+  
+  def have_comp_tag(selector, options = {})
+    if ::SortingTableFor::Tools::rails3?
+      if options.has_key? :text
+        options[:content] = options[:text]
+        options.delete :text
+      end
+      return have_selector(selector, options)
+    end
+    have_tag(selector, options)
+  end
   
 end

@@ -21,92 +21,91 @@ describe SortingTableFor, :type => :helper do
       it "should works" do
         helper.sorting_table_for(@users) do |table|
           html = table.headers
-          html.should have_tag("thead", :count => 1)
-          html.should have_tag("tr", :count => 1)
-          html.should have_tag("th", :count => 11)
+          html.should have_comp_tag("thead", :count => 1)
+          html.should have_comp_tag("tr", :count => 1)
+          html.should have_comp_tag("th", :count => 11)
         end
       end
     
       it "should add sorting class on th" do
         helper.sorting_table_for(@users) do |table|
-          table.headers.should have_tag("th[class='cur-sort-not']", :count => 9)
+          table.headers.should have_comp_tag("th[class='cur-sort-not']", :count => 9)
         end
       end
       
       it "should have link for sorting" do
         helper.sorting_table_for(@users) do |table|
-          table.headers.should have_tag("a", :count => 9)
+          table.headers.should have_comp_tag("a", :count => 9)
         end
       end
       
       it "should not sort" do
         helper.sorting_table_for(@users, :sort => false) do |table|
-          table.headers.should_not have_tag("th[class='cur-sort-not']")
-          table.headers.should_not have_tag("a")
+          table.headers.should_not have_comp_tag("th[class='cur-sort-not']")
+          table.headers.should_not have_comp_tag("a")
         end
       end
       
       it "should be customize with html" do
-        helper.sorting_table_for(@users, :html => { :class => 'table_class', :id => 'table_id' }) do |table|
+        table_html = helper.sorting_table_for(@users, :html => { :class => 'table_class', :id => 'table_id' }) do |table|
           html = table.headers(:html => { :class => 'header_class', :id => 'header_id' })
-          html.should have_tag("tr[class=header_class][id=header_id]")
+          html.should have_comp_tag("tr[class=header_class][id=header_id]")
         end
-        helper.output_buffer.should have_tag("table[class='table_class sorting_table_for'][id=table_id]")
+        helper.output_buffer.concat(table_html)
+        helper.output_buffer.should have_comp_tag("table[class='table_class sorting_table_for'][id=table_id]")
       end
       
     end
-   
+       
     describe ' #custom headers' do
-   
+       
       it "should choose one column" do
         helper.sorting_table_for(@users) do |table|
-          table.headers(:username).should have_tag("th", :count => 1)
+          table.headers(:username).should have_comp_tag("th", :count => 1)
         end
       end
-
+    
       it "should choose multi columns" do
         helper.sorting_table_for(@users) do |table|
-          table.headers(:username, :price).should have_tag("th", :count => 2)
+          table.headers(:username, :price).should have_comp_tag("th", :count => 2)
         end
       end
-
+    
       it "should choose multi columns and one action" do
         helper.sorting_table_for(@users) do |table|
-          table.headers(:username, :price, :actions => :edit).should have_tag("th", :count => 3)
+          table.headers(:username, :price, :actions => :edit).should have_comp_tag("th", :count => 3)
         end
       end
       
       it "should choose multi columns and actions" do
         helper.sorting_table_for(@users) do |table|
-          table.headers(:username, :price, :actions => [:edit, :edit_password]).should have_tag("th", :count => 4)
+          table.headers(:username, :price, :actions => [:edit, :edit_password]).should have_comp_tag("th", :count => 4)
         end
       end
       
       it "should works with non symbol field" do
         helper.sorting_table_for(@users) do |table|
           html = table.headers(:username, 'test', image_tag('rails.png'))
-          html.should have_tag("th", :count => 3)
-          html.should have_tag("th:nth-child(2)", :text => 'test')
-          html.should have_tag("th:nth-child(3)") do
-            with_tag "img"
-          end
+          html.should have_comp_tag("th", :count => 3)
+          html.should have_comp_tag("th:nth-child(2)", :text => 'test')
+          html.should have_comp_tag("th:nth-child(3) img")
         end
       end
       
       it "should works with non key symbol" do
         helper.sorting_table_for(@users) do |table|
-          table.headers(:username, :test).should have_tag("th", :count => 2)
+          table.headers(:username, :test).should have_comp_tag("th", :count => 2)
         end
       end
       
       it "should works with i18n for symbol" do
         helper.sorting_table_for(@users) do |table|
           html = table.headers(:username, :firstname, 'hello', :my_fake, :actions => :edit)
-          html.should have_tag("th:nth-child(1)", :text => 'Usernames')
-          html.should have_tag("th:nth-child(2)", :text => 'Firstnames')
-          html.should have_tag("th:nth-child(3)", :text => 'hello')
-          html.should have_tag("th:nth-child(4)", :text => 'Hello fake')
-          html.should have_tag("th:nth-child(5)", :text => 'Edit users')          
+          html.should have_comp_tag("th:nth-child(1)", :text => 'Usernames')
+          html.should have_comp_tag("th:nth-child(2)", :text => 'Firstnames')
+          html.should have_comp_tag("th:nth-child(3)", :text => 'hello')
+          html.should have_comp_tag("th:nth-child(4)", :text => 'Hello fake')
+          html.should have_comp_tag("th:nth-child(5)", :text => 'Edit users')          
         end
       end
       
@@ -119,9 +118,9 @@ describe SortingTableFor, :type => :helper do
           html = table.headers do
             table.header(:username)
           end
-          html.should have_tag("thead", :count => 1)
-          html.should have_tag("tr", :count => 1)
-          html.should have_tag("th", :count => 1)
+          html.should have_comp_tag("thead", :count => 1)
+          html.should have_comp_tag("tr", :count => 1)
+          html.should have_comp_tag("th", :count => 1)
         end
       end
       
@@ -134,31 +133,30 @@ describe SortingTableFor, :type => :helper do
             table.header image_tag('rails.png')
             table.header I18n.t('my_test', :scope => [:fake_scope])
           end
-          html.should have_tag("th", :count => 5)
-          html.should have_tag("th[class=cur-sort-not]", :count => 2)
-          html.should have_tag("th:nth-child(3)", :text => 'test')
-          html.should have_tag("th:nth-child(4)") do
-            with_tag 'img'
-          end
-          html.should have_tag('th:nth-child(5)', :text => 'Hello')
+          html.should have_comp_tag("th", :count => 5)
+          html.should have_comp_tag("th[class=cur-sort-not]", :count => 2)
+          html.should have_comp_tag("th:nth-child(3)", :text => 'test')
+          html.should have_comp_tag("th:nth-child(4) img")
+          html.should have_comp_tag('th:nth-child(5)', :text => 'Hello')
         end
       end
       
       it "should be customize with html" do
-        helper.sorting_table_for(@users, :html => { :class => 'table_class', :id => 'table_id' }) do |table|
+        table_html = helper.sorting_table_for(@users, :html => { :class => 'table_class', :id => 'table_id' }) do |table|
           html = table.headers(:html => { :class => 'header_class', :id => 'header_id' }) do
             table.header :username, :html => { :class => 'cell_1_class', :id => 'cell_1_id', :title => 'hello_1' }
             table.header :firstname, :html => { :class => 'cell_2_class', :id => 'cell_2_id', :title => 'hello_2' }
             table.header 'hello', :html => { :class => 'cell_3_class', :id => 'cell_3_id', :title => 'hello_3' }
           end
-          html.should have_tag("tr[class=header_class][id=header_id]")
-          html.should have_tag("th:nth-child(1)[class='cell_1_class cur-sort-not'][id=cell_1_id][title=hello_1]")
-          html.should have_tag("th:nth-child(2)[class='cell_2_class cur-sort-not'][id=cell_2_id][title=hello_2]")
-          html.should have_tag("th:nth-child(3)[class=cell_3_class][id=cell_3_id][title=hello_3]")
+          html.should have_comp_tag("tr[class=header_class][id=header_id]")
+          html.should have_comp_tag("th:nth-child(1)[class='cell_1_class cur-sort-not'][id=cell_1_id][title=hello_1]")
+          html.should have_comp_tag("th:nth-child(2)[class='cell_2_class cur-sort-not'][id=cell_2_id][title=hello_2]")
+          html.should have_comp_tag("th:nth-child(3)[class=cell_3_class][id=cell_3_id][title=hello_3]")
         end
-        helper.output_buffer.should have_tag("table[class='table_class sorting_table_for'][id=table_id]")
+        helper.output_buffer.concat(table_html)
+        helper.output_buffer.should have_comp_tag("table[class='table_class sorting_table_for'][id=table_id]")
       end
-
+    
       it "should works with i18n for symbol" do
         helper.sorting_table_for(@users) do |table|
           html = table.headers do 
@@ -168,32 +166,32 @@ describe SortingTableFor, :type => :helper do
             table.header :my_fake
             table.header :action => :edit
           end
-          html.should have_tag("th:nth-child(1)", :text => 'Usernames')
-          html.should have_tag("th:nth-child(2)", :text => 'Firstnames')
-          html.should have_tag("th:nth-child(3)", :text => 'hello')
-          html.should have_tag("th:nth-child(4)", :text => 'Hello fake')
-          html.should have_tag("th:nth-child(5)", :text => 'Edit users')          
+          html.should have_comp_tag("th:nth-child(1)", :text => 'Usernames')
+          html.should have_comp_tag("th:nth-child(2)", :text => 'Firstnames')
+          html.should have_comp_tag("th:nth-child(3)", :text => 'hello')
+          html.should have_comp_tag("th:nth-child(4)", :text => 'Hello fake')
+          html.should have_comp_tag("th:nth-child(5)", :text => 'Edit users')          
         end
       end
-
+    
       it "should not sort all columns" do
         helper.sorting_table_for(@users, :sort => false) do |table|
           html = table.headers do
             table.header :username
             table.header :price
           end
-          html.should_not have_tag("th[class=cur-sort-not]")
+          html.should_not have_comp_tag("th[class=cur-sort-not]")
         end        
       end
-
+    
       it "should not sort on select columns" do
         helper.sorting_table_for(@users) do |table|
           html = table.headers do
             table.header :username, :sort => true
             table.header :price, :sort => false
           end
-          html.should have_tag("th:nth-child(1)[class=cur-sort-not]")
-          html.should_not have_tag("th:nth-child(2)[class=cur-sort-not]")
+          html.should have_comp_tag("th:nth-child(1)[class=cur-sort-not]")
+          html.should_not have_comp_tag("th:nth-child(2)[class=cur-sort-not]")
         end        
       end
       
@@ -203,8 +201,8 @@ describe SortingTableFor, :type => :helper do
             table.header :username, :sort => true
             table.header :price, :sort => false
           end
-          html.should have_tag("th:nth-child(1)[class=cur-sort-not]")
-          html.should_not have_tag("th:nth-child(2)[class=cur-sort-not]")
+          html.should have_comp_tag("th:nth-child(1)[class=cur-sort-not]")
+          html.should_not have_comp_tag("th:nth-child(2)[class=cur-sort-not]")
         end        
       end      
       
@@ -222,7 +220,7 @@ describe SortingTableFor, :type => :helper do
               :firstname
             end
           end
-          html.should have_tag("th", :count => 2)
+          html.should have_comp_tag("th", :count => 2)
         end
       end
       
@@ -233,7 +231,7 @@ describe SortingTableFor, :type => :helper do
               :username
             end
           end
-          html.should_not have_tag("a")
+          html.should_not have_comp_tag("a")
         end
       end
       
@@ -244,11 +242,11 @@ describe SortingTableFor, :type => :helper do
               :username
             end
           end
-          html.should_not have_tag("th[class=cur-sort-not]")
+          html.should_not have_comp_tag("th[class=cur-sort-not]")
         end
       end
       
-      it "should not set I18n" do
+      it "should not set I18n ici" do
         helper.sorting_table_for(@users) do |table|
           html = table.headers do
             table.header do
@@ -261,14 +259,18 @@ describe SortingTableFor, :type => :helper do
               I18n.t(:my_test, :scope => :fake_scope)
             end
           end
-          html.should have_tag("th:nth-child(1)", :text => 'username')
-          html.should have_tag("th:nth-child(2)", :text => 'firstname')
-          html.should have_tag("th:nth-child(3)", :text => 'Hello')
+          if SortingTableFor::Tools::rails3?
+            html.should have_comp_tag("th:nth-child(1)", :text => '')
+          else
+            html.should have_comp_tag("th:nth-child(1)", :text => 'username')
+          end
+          html.should have_comp_tag("th:nth-child(2)", :text => 'firstname')
+          html.should have_comp_tag("th:nth-child(3)", :text => 'Hello')
         end
       end
       
       it "should be customize with html" do
-        helper.sorting_table_for(@users, :html => { :class => 'table_class', :id => 'table_id' }) do |table|
+        table_html = helper.sorting_table_for(@users, :html => { :class => 'table_class', :id => 'table_id' }) do |table|
           html = table.headers(:html => { :class => 'header_class', :id => 'header_id' }) do
             table.header :html => { :class => 'cell_1_class', :id => 'cell_1_id', :title => 'hello_1' } do
               :username
@@ -280,12 +282,13 @@ describe SortingTableFor, :type => :helper do
               'hello'
             end
           end
-          html.should have_tag("tr[class=header_class][id=header_id]")
-          html.should have_tag("th:nth-child(1)[class='cell_1_class'][id=cell_1_id][title=hello_1]")
-          html.should have_tag("th:nth-child(2)[class='cell_2_class'][id=cell_2_id][title=hello_2]")
-          html.should have_tag("th:nth-child(3)[class=cell_3_class][id=cell_3_id][title=hello_3]")
+          html.should have_comp_tag("tr[class=header_class][id=header_id]")
+          html.should have_comp_tag("th:nth-child(1)[class='cell_1_class'][id=cell_1_id][title=hello_1]")
+          html.should have_comp_tag("th:nth-child(2)[class='cell_2_class'][id=cell_2_id][title=hello_2]")
+          html.should have_comp_tag("th:nth-child(3)[class=cell_3_class][id=cell_3_id][title=hello_3]")
         end
-        helper.output_buffer.should have_tag("table[class='table_class sorting_table_for'][id=table_id]")
+        helper.output_buffer.concat(table_html)
+        helper.output_buffer.should have_comp_tag("table[class='table_class sorting_table_for'][id=table_id]")
       end
       
     end
@@ -302,7 +305,7 @@ describe SortingTableFor, :type => :helper do
       it "should edit reserved columns" do
         SortingTableFor::TableBuilder.reserved_columns = [:id, :firstname, :lastname, :position, :salary, :price, :active, :created_at, :updated_at]
         helper.sorting_table_for(@users) do |table|
-          table.headers.should have_tag("th", :count => 3)
+          table.headers.should have_comp_tag("th", :count => 3)
         end
       end
       
@@ -312,11 +315,11 @@ describe SortingTableFor, :type => :helper do
         helper.sorting_table_for(@users) do |table|
         end        
       end
-
+    
       it "should edit default actions" do
         SortingTableFor::TableBuilder.default_actions = [:show, :edit_password, :edit, :delete]
         helper.sorting_table_for(@users) do |table|
-          table.headers.should have_tag("th", :count => User.column_names.size + 3)
+          table.headers.should have_comp_tag("th", :count => User.column_names.size + 3)
         end
       end
       

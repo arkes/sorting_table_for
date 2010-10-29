@@ -6,7 +6,6 @@ module SortingTableFor
   
   class TableBuilder
     
-    #include ::ActionView::Helpers
     include ::ActionView::Helpers::TagHelper
     include ::ActionView::Helpers::NumberHelper
     
@@ -293,7 +292,7 @@ module SortingTableFor
     
     def create_link_to(block, url, remote, method = nil, confirm = nil)
       if remote and Tools::rails3?
-        return @@template.link_to(block, :url => url, :method => method, :confirm => confirm, :remote => true)
+        return @@template.link_to(block, url, :method => method, :confirm => confirm, :remote => true)
       elsif remote
         method = :get if method.nil?
         return @@template.link_to_remote(block, { :url => url, :method => method, :confirm => confirm })

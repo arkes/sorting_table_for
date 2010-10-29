@@ -6,11 +6,10 @@ require 'sorting_table_for/tools'
 
 module SortingTableFor
   
-  def sorting_table_for(object_or_array, *args, &proc)
+  def sorting_table_for(object_or_array, *args)
     raise ArgumentError, 'Missing block' unless block_given?
     options = args.extract_options!
-    html_options = options[:html]
-    html_options = (html_options) ? options[:html].merge!(:class => "#{html_options[:class]} sorting_table_for") : { :class => :sorting_table_for }
+    html_options = (options[:html]) ? options[:html].merge(:class => "#{options[:html][:class]} sorting_table_for".strip) : { :class => :sorting_table_for }
     builder = options[:builder] || TableBuilder
     case object_or_array
       when Array
@@ -25,9 +24,9 @@ module SortingTableFor
         object = object_or_array
         object_or_array = []
     end
-    concat(Tools::html_safe(tag(:table, html_options, true)))
-    yield builder.new(object, object_or_array, self, options, params)
-    concat(Tools::html_safe('</table>'))
+    content_tag(:table, html_options) do
+      yield builder.new(object, object_or_array, self, options, params)
+    end
   end
   
 end

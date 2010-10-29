@@ -18,18 +18,20 @@ describe SortingTableFor, :type => :helper do
   
     it "should raise and error" do
       expect {
-        helper.sorting_table_for(@user)
+        helper.sorting_table_for(@users)
       }.to raise_error { ArgumentError }
     end
     
     it "should have balise table with class" do
-      helper.sorting_table_for(@users) {}
-      helper.output_buffer.should have_tag("table[class=sorting_table_for]")
+      table_html = helper.sorting_table_for(@users) {}
+      helper.output_buffer.concat(table_html)
+      helper.output_buffer.should have_comp_tag("table[class=sorting_table_for]")
     end
     
     it "should be custom by html" do
-      helper.sorting_table_for(@users, :html => { :class => 'hello', :id => 'my_test' }) {}
-      helper.output_buffer.should have_tag("table[class='hello sorting_table_for'][id='my_test']")
+      table_html = helper.sorting_table_for(@users, :html => { :class => 'hello', :id => 'my_test' }) {}
+      helper.output_buffer.concat(table_html)
+      helper.output_buffer.should have_comp_tag("table[class='hello sorting_table_for'][id='my_test']")
     end
     
     it "should take another builder" do
