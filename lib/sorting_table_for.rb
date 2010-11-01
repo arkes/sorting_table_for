@@ -19,10 +19,10 @@ module SortingTableFor
   #
   # === Options
   #
-  # :builder - Set a table builder (default: SortingTableFor::TableBuilder)
-  # :html - Set html options (id, class, ...)
-  # :remote_link - To set actions link with ajax (true or false)
-  # :remote_sort - To set link for sorting with ajax (true of false)
+  # * :builder - Set a table builder (default: SortingTableFor::TableBuilder)
+  # * :html - Set html options (id, class, ...)
+  # * :remote_link - To set actions link with ajax (true or false)
+  # * :remote_sort - To set link for sorting with ajax (true of false)
   #
   def sorting_table_for(object_or_array, *args)
     raise ArgumentError, 'Missing block' unless block_given?

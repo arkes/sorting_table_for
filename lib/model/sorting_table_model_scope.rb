@@ -11,17 +11,17 @@ module SortingTableModelScope
     
     # Return a scope of the object with an order
     #
-    # Usage:
+    # === Usage
     # 
-    # sorting_table(the params) - Sorting by the given parameters
-    # sorting_table(the params, column name) - Sort by the column name with direction ascending, if no parameters
-    # sorting_table(the params, column name, direction) - Sort by the column name with the given direction, if no parameters
+    #  sorting_table(the params) - Sorting by the given parameters
+    #  sorting_table(the params, column name) - Sort by the column name with direction ascending, if no parameters
+    #  sorting_table(the params, column name, direction) - Sort by the column name with the given direction, if no parameters
     #
-    # Exemples:
+    # === Exemples
     #
-    # User.sorting_table(params)
-    # User.sorting_table(params, :username)
-    # User.sorting_table(params, :username, :desc)
+    #  User.sorting_table(params)
+    #  User.sorting_table(params, :username)
+    #  User.sorting_table(params, :username, :desc)
     #
     def sorting_table(*args)
       raise ArgumentError, 'sorting_table: Too many arguments (max : 3)' if args.size > 3 
