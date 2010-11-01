@@ -64,10 +64,10 @@ module SortingTableFor
     #    </thead>
     #  </table>
     #
-    #  === Quick Headers
+    # === Quick Headers
     #
-    #  When called without a block or a list, the headers are rendered for each column in 
-    #  the model's database table and the default actions (edit, delete), and the links to sort.
+    # When called without a block or a list, the headers are rendered for each column in 
+    # the model's database table and the default actions (edit, delete), and the links to sort.
     #
     #  <% sorting_table_for @users do |table| %>
     #    <%= table.headers %>
@@ -168,8 +168,8 @@ module SortingTableFor
     #
     # === Options
     #
-    # :sort - true of false to add or not sorting
-    # :html - Hash options: class, id, ...
+    # * :sort - true of false to add or not sorting
+    # * :html - Hash options: class, id, ...
     #
     # === Values
     #
@@ -228,7 +228,7 @@ module SortingTableFor
     #    </tbody>
     #  </table>
     #
-    #  === Quick Columns
+    # === Quick Columns
     #
     # When called without a block or a list, the columns are rendered for each column in 
     # the model's database table and the default actions (edit, delete).
@@ -239,10 +239,10 @@ module SortingTableFor
     #
     # === Options
     #
-    # :html - Hash options: class, id, ...
-    # :actions - Set actions to render
-    # :only - Columns only to render
-    # :except - Columns to not render
+    # * :html - Hash options: class, id, ...
+    # * :actions - Set actions to render
+    # * :only - Columns only to render
+    # * :except - Columns to not render
     #
     #  # Exemples:
     #  <% sorting_table_for @users do |table| %>
@@ -277,8 +277,8 @@ module SortingTableFor
     #
     # For action :delete the builder set a confirm message with I18n translation.
     #
-    # # the I18n confirm message:
-    # I18n.t(:confirm_delete, :scope => [:current_controller, :current_action])
+    #  # the I18n confirm message:
+    #  I18n.t(:confirm_delete, :scope => [:current_controller, :current_action])
     #
     # === Total entries
     #
@@ -362,10 +362,10 @@ module SortingTableFor
     #
     # === Options
     #
-    # :html - Hash options: class, id, ...
-    # :as - Force to render a type (:date, :time, :currency)
-    # :format - Set the I18n localization format for :date or :time (:default, :short, ...)
-    # :action - Set an action
+    # * :html - Hash options: class, id, ...
+    # * :as - Force to render a type (:date, :time, :currency)
+    # * :format - Set the I18n localization format for :date or :time (:default, :short, ...)
+    # * :action - Set an action
     #
     #  # Exemple:
     #  <% sorting_table_for @users do |table| %>
