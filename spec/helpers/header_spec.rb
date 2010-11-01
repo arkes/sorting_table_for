@@ -26,7 +26,7 @@ describe SortingTableFor, :type => :helper do
           html.should have_comp_tag("th", :count => 11)
         end
       end
-    
+
       it "should add sorting class on th" do
         helper.sorting_table_for(@users) do |table|
           table.headers.should have_comp_tag("th[class='cur-sort-not']", :count => 9)
@@ -181,7 +181,7 @@ describe SortingTableFor, :type => :helper do
             table.header :price
           end
           html.should_not have_comp_tag("th[class=cur-sort-not]")
-        end        
+        end
       end
     
       it "should not sort on select columns" do

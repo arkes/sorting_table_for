@@ -422,7 +422,7 @@ module SortingTableFor
     # Set default global options
     # Set sort to true if the value isn't defined in options
     def set_default_global_options
-      @@options[:sort] = true unless @@options.has_key? :sort
+      @@options[:sort] = true if !defined?(@@options[:sort]) or !@@options.has_key? :sort
     end
     
     # Calculate the total entries
@@ -594,7 +594,7 @@ module SortingTableFor
     def set_default_options
       @html_options = {} unless defined? @html_options
       @options = {} unless defined? @options
-      @options[:sort] = @@options[:sort] || true if !@options.has_key? :sort
+      @options[:sort] = @@options[:sort] if !@options.has_key? :sort
     end
     
     # Create the link for actions
