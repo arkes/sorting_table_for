@@ -4,10 +4,13 @@ module SortingTableFor
   module I18n    
     class << self
       
+      # Set options to create a default scope
       def set_options(params, model_name, namespace)
         @params, @model_name, @namespace = params, model_name, namespace
       end
       
+      # Translate
+      # Add a default scope if option scope isn't defined
       def translate(attribute, options = {}, action_header = false)
         if !options.has_key? :scope
           options[:scope] = create_scope 
@@ -18,7 +21,8 @@ module SortingTableFor
       alias :t :translate
       
       private
-
+      
+      # Return an array with the scope based on option: SortingTableFor::TableBuilder.i18n_default_scope
       def create_scope
         return TableBuilder.i18n_default_scope.collect do |scope_value|
           case scope_value.to_sym

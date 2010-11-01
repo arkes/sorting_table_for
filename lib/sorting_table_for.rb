@@ -6,6 +6,24 @@ require 'sorting_table_for/tools'
 
 module SortingTableFor
   
+  # Method sorting_table_for with builder => SortingTableFor::TableBuilder
+  #
+  #  # Exemples :
+  #  <% sorting_table_for @users do |table| %>
+  #  <% end %>
+  #
+  #  <% sorting_table_for @users do |table| %>
+  #    <%= table.headers %>
+  #    <%= table.columns %>
+  #  <% end %>
+  #
+  # === Options
+  #
+  # :builder - Set a table builder (default: SortingTableFor::TableBuilder)
+  # :html - Set html options (id, class, ...)
+  # :remote_link - To set actions link with ajax (true or false)
+  # :remote_sort - To set link for sorting with ajax (true of false)
+  #
   def sorting_table_for(object_or_array, *args)
     raise ArgumentError, 'Missing block' unless block_given?
     options = args.extract_options!
