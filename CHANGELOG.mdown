@@ -1,0 +1,5 @@
+# CHANGELOG
+
+### Version 0.1.0 _(October 29, 2010)_
+
+* Initial commit
