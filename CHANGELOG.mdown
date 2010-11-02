@@ -1,5 +1,10 @@
 # CHANGELOG
 
+### Version 0.1.1 _(November 02, 2010)_
+
+* Add documentation
+* Fix a bug with sort options
+
 ### Version 0.1.0 _(October 29, 2010)_
 
 * Initial commit
