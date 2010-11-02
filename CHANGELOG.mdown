@@ -1,5 +1,9 @@
 # CHANGELOG
 
+### Version 0.1.2 _(November 02, 2010)_
+
+* Problem with date
+
 ### Version 0.1.1 _(November 02, 2010)_
 
 * Add documentation
