@@ -214,7 +214,7 @@ There are some options that you can customize in your initiatilizer
 
 [_see the initializer file exemple for more explanation_][]
 
-Copyright (c) 2010 arkownz (tom), released under the MIT license
+Copyright (c) 2010 arkownz (Thomas Floch), released under the MIT license
 
 [_see the initializer file exemple for more explanation_]: http://github.com/arkownz/sorting_table_for/blob/master/assets/config/initializers/sorting_table_for.rb
 [_Here an exemple of css file_]: http://github.com/arkownz/sorting_table_for/blob/master/assets/public/stylesheets/sorting_table_for.css
