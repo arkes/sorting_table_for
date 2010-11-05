@@ -42,6 +42,20 @@ describe SortingTableFor, :type => :helper do
       end
     end
     
+    it "should no use i18n by default" do
+      helper.sorting_table_for(@users) do |table|
+        html = table.headers(:username)
+        html.should have_comp_tag("th:nth-child(1)", :text => 'Usernames')
+      end
+    end
+    
+    it "should not use i18n" do
+      helper.sorting_table_for(@users, :i18n => false) do |table|
+        html = table.headers(:username)
+        html.should have_comp_tag("th:nth-child(1)", :text => 'username')
+      end
+    end
+    
   end
     
 end

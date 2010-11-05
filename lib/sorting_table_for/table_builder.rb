@@ -28,8 +28,8 @@ module SortingTableFor
     
     def initialize(collection, object_or_array, template, options, params)
       @collection, @@object_or_array, @@template, @@options, @@params = collection, object_or_array, template, options, params
-      I18n.set_options(params, model_name(@collection.first), object_or_array.first)
       set_default_global_options
+      I18n.set_options(params, model_name(@collection.first), object_or_array.first, @@options[:i18n])
       @lines = []
     end
     
@@ -421,8 +421,10 @@ module SortingTableFor
     
     # Set default global options
     # Set sort to true if the value isn't defined in options
+    # Set i18n to true if the value isn't defined in options
     def set_default_global_options
       @@options[:sort] = true if !defined?(@@options[:sort]) or !@@options.has_key? :sort
+      @@options[:i18n] = true if !defined?(@@options[:i18n]) or !@@options.has_key? :i18n
     end
     
     # Calculate the total entries

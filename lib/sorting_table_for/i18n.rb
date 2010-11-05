@@ -5,13 +5,17 @@ module SortingTableFor
     class << self
       
       # Set options to create a default scope
-      def set_options(params, model_name, namespace)
-        @params, @model_name, @namespace = params, model_name, namespace
+      def set_options(params, model_name, namespace, i18n_active)
+        @params, @model_name, @namespace, @i18n_active = params, model_name, namespace, i18n_active
       end
       
       # Translate
       # Add a default scope if option scope isn't defined
       def translate(attribute, options = {}, action_header = false)
+        if !@i18n_active
+          return options[:value] if options.has_key? :value
+          return attribute
+        end
         if !options.has_key? :scope
           options[:scope] = create_scope 
           options[:scope] << TableBuilder.i18n_add_header_action_scope if action_header
