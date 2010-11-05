@@ -415,6 +415,16 @@ module SortingTableFor
     #    <caption>hello</caption>
     #  </table>
     #
+    # === Quick
+    #
+    # When called without a block or a value, caption is set with I18n translation.
+    #
+    #  # Exemple of i18n_default_scope:
+    #  SortingTableFor::TableBuilder.i18n_default_scope = [:controller, :action]
+    #
+    #  # Ouput:
+    #  I18n.t(:table_caption, :scope => [:current_controller, :current_action]) => en.current_controller.current_action.table_caption
+    #
     # === Options
     #
     # * :position - To set the position of the caption: :top, :bottom, :left, :right (default: :top)
@@ -429,7 +439,7 @@ module SortingTableFor
       if block_given?
         @caption[:value] = @@template.capture(&block)
       else
-        @caption[:value] = args.first;
+        @caption[:value] = (args.empty?) ? I18n.t(:table_caption) : args.first;
       end
       render_caption
     end

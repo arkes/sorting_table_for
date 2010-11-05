@@ -49,6 +49,7 @@ test:
   
   fakes:
     index:
+      table_caption: 'Quick Caption'
       edit: 'Edit'
       delete: 'Delete'
       header:

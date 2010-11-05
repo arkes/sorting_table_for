@@ -13,6 +13,7 @@ module SortingTableFor
   #  <% end %>
   #
   #  <% sorting_table_for @users do |table| %>
+  #    <%= table.caption %>
   #    <%= table.headers %>
   #    <%= table.columns %>
   #  <% end %>
