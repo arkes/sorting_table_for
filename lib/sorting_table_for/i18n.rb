@@ -5,7 +5,7 @@ module SortingTableFor
     class << self
       
       # Set options to create a default scope
-      def set_options(params, model_name, namespace, i18n_active)
+      def set_options(params, model_name, namespace, i18n_active = true)
         @params, @model_name, @namespace, @i18n_active = params, model_name, namespace, i18n_active
       end
       

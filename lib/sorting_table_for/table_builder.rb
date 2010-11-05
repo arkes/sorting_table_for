@@ -394,6 +394,46 @@ module SortingTableFor
       nil
     end
     
+    # Create a tag caption to set a title to a table
+    # It can be called with or without a block.
+    # The two exemples are equivalent:
+    #
+    #  # Without block
+    #  <% sorting_table_for @users do |table| %>
+    #    <%= table.caption 'hello' %>
+    #  <% end %>
+    #
+    #  # With block
+    #  <% sorting_table_for @users do |table| %>
+    #    <%= table.caption do %>
+    #      'hello'
+    #    <% end %>
+    #  <% end %>
+    #
+    #  # Output:
+    #  <table class='sorting_table_for'>    
+    #    <caption>hello</caption>
+    #  </table>
+    #
+    # === Options
+    #
+    # * :position - To set the position of the caption: :top, :bottom, :left, :right (default: :top)
+    # * :html - Hash options: class, id, ...
+    #
+    # === Values
+    #
+    # All the values won't be interpreted.
+    #
+    def caption(*args, &block)
+      @caption[:option], @caption[:html] = get_column_and_html_options( args.extract_options! )
+      if block_given?
+        @caption[:value] = @@template.capture(&block)
+      else
+        @caption[:value] = args.first;
+      end
+      render_caption
+    end
+    
     protected
     
     # Return the name of the model
@@ -402,6 +442,16 @@ module SortingTableFor
     end
     
     private
+    
+    def render_caption
+      if @caption
+        if @caption.has_key? :option and @caption[:option].has_key? :position
+          @caption[:html].merge!(:align => @caption[:option][:position])
+        end
+        return Tools::html_safe(content_tag(:caption, @caption[:value], @caption[:html]))
+      end
+      ''
+    end
     
     # Return the balise thead and its content
     def render_thead
@@ -420,9 +470,11 @@ module SortingTableFor
     end
     
     # Set default global options
+    # init caption to a new hash
     # Set sort to true if the value isn't defined in options
     # Set i18n to true if the value isn't defined in options
     def set_default_global_options
+      @caption = {}
       @@options[:sort] = true if !defined?(@@options[:sort]) or !@@options.has_key? :sort
       @@options[:i18n] = true if !defined?(@@options[:i18n]) or !@@options.has_key? :i18n
     end
