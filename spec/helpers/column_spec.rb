@@ -82,6 +82,13 @@ describe SortingTableFor, :type => :helper do
       helper.output_buffer.should have_comp_tag("table[class='table_class sorting_table_for'][id=table_id]")
     end
     
+    it "should have option colspan" do
+      table_html = helper.sorting_table_for(@users) do |table|
+        html = table.columns :colspan => 5
+        html.should have_comp_tag('td[colspan="5"]', :count => (@users.size * User.content_columns.size))
+      end
+    end
+    
   end
   
   describe " #table columns" do
@@ -160,6 +167,13 @@ describe SortingTableFor, :type => :helper do
       helper.output_buffer.should have_comp_tag("table[class='table_class sorting_table_for'][id=table_id]")
     end
   
+    it "should have option colspan" do
+      table_html = helper.sorting_table_for(@users) do |table|
+        html = table.columns :username, :colspan => 5
+        html.should have_comp_tag('td[colspan="5"]', :count => @users.size)
+      end
+    end  
+  
   end
   
   describe " #table column" do
@@ -214,6 +228,17 @@ describe SortingTableFor, :type => :helper do
       end
       helper.output_buffer.concat(table_html)
       helper.output_buffer.should have_comp_tag("table[class='table_class sorting_table_for'][id=table_id]")
+    end
+    
+    it "should have option colspan" do
+      table_html = helper.sorting_table_for(@users) do |table|
+        html = table.columns do
+          table.column :username, :colspan => 5
+          table.column :price, :colspan => 3
+        end
+        html.should have_comp_tag('td[colspan="5"]', :count => @users.size)
+        html.should have_comp_tag('td[colspan="3"]', :count => @users.size)
+      end
     end
     
   end
@@ -290,6 +315,21 @@ describe SortingTableFor, :type => :helper do
       helper.output_buffer.concat(table_html)
       helper.output_buffer.should have_comp_tag("table[class='table_class sorting_table_for'][id=table_id]")
     end
+
+    it "should have option colspan" do
+      table_html = helper.sorting_table_for(@users) do |table|
+        html = table.columns do
+          table.column :colspan => 5 do
+            'my_colspan'
+          end
+          table.column :colspan => 3 do
+            'my_colspan_2'
+          end
+        end
+        html.should have_comp_tag('td[colspan="5"]', :count => @users.size)
+        html.should have_comp_tag('td[colspan="3"]', :count => @users.size)
+      end
+    end
     
   end
   
@@ -301,7 +341,7 @@ describe SortingTableFor, :type => :helper do
       SortingTableFor::TableBuilder.reserved_columns = [:id, :password, :salt]
       SortingTableFor::TableBuilder.default_actions = [:edit, :delete]
     end
-    
+  
     it "should not add total entries" do
       SortingTableFor::TableBuilder.show_total_entries = false
       helper.sorting_table_for(@users) do |table|

@@ -16,6 +16,7 @@ module SortingTableFor
   #    <%= table.caption %>
   #    <%= table.headers %>
   #    <%= table.columns %>
+  #    <%= table.footers %>
   #  <% end %>
   #
   # === Options

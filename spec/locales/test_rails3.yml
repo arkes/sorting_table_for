@@ -65,6 +65,9 @@ test:
         edit: 'Edit users'
         delete: 'Delete users'
         my_fake: 'Hello fake'
+      footer:
+        username: 'UserFoot'
+        price: 'PriceFoot'
 
 
   fake_scope:

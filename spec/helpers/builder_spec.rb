@@ -57,5 +57,35 @@ describe SortingTableFor, :type => :helper do
     end
     
   end
+   
+  describe " #All" do
     
+    it "should works with by default" do
+      helper.sorting_table_for(@users) do |table|
+        html = table.caption
+        html += table.headers
+        html += table.columns
+        html += table.footers :username
+        html.should have_comp_tag("caption", :count => 1)
+        html.should have_comp_tag("thead", :count => 1)
+        html.should have_comp_tag("tbody", :count => 1)
+        html.should have_comp_tag("tfoot", :count => 1)
+      end
+    end
+    
+    it "should works with by default" do
+      helper.sorting_table_for(@users) do |table|
+        html = table.caption 'hello'
+        html += table.headers :username
+        html += table.columns :username
+        html += table.footers :username
+        html.should have_comp_tag("thead tr th", :count => 1)
+        html.should have_comp_tag("tbody tr td", :count => @users.count + 1)
+        html.should have_comp_tag("tbody tr[class=total-entries] td", :count => 1)
+        html.should have_comp_tag("tfoot tr td", :count => 1)
+      end
+    end    
+    
+  end 
+  
 end

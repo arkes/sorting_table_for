@@ -13,7 +13,8 @@ module SortingTableFor
                                :default_boolean, :show_total_entries,
                                :params_sort_table, :i18n_default_format_date,
                                :html_sorting_class, :default_actions,
-                               :i18n_default_scope, :i18n_add_header_action_scope
+                               :i18n_default_scope, :i18n_add_header_action_scope,
+                               :i18n_add_footer_action_scope
     
     self.reserved_columns             = [:id, :password, :salt]
     self.currency_columns             = [:price, :total_price, :currency, :money]
@@ -25,6 +26,7 @@ module SortingTableFor
     self.default_actions              = [:edit, :delete]
     self.i18n_default_scope           = [:namespace, :controller, :action]
     self.i18n_add_header_action_scope = :header
+    self.i18n_add_footer_action_scope = :footer
     
     def initialize(collection, object_or_array, template, options, params)
       @collection, @@object_or_array, @@template, @@options, @@params = collection, object_or_array, template, options, params
@@ -75,9 +77,10 @@ module SortingTableFor
     #
     # === Options
     #
-    # All options are passed down to the fieldser HTML attribtues (id, class, title, ...) expect
-    # for option sort.
-    #   
+    # * :sort - true of false to add or not sorting
+    # * :html - Hash options: class, id, ...
+    # * :caption - set caption on td
+    # 
     #  # Html option:
     #  <% sorting_table_for @users do |table| do %>
     #    <%= table.headers :username, :firstname, :html => { :class => 'my_class', :id => 'my_id' }
@@ -170,6 +173,7 @@ module SortingTableFor
     #
     # * :sort - true of false to add or not sorting
     # * :html - Hash options: class, id, ...
+    # * :caption - set caption on td
     #
     # === Values
     #
@@ -243,6 +247,7 @@ module SortingTableFor
     # * :actions - Set actions to render
     # * :only - Columns only to render
     # * :except - Columns to not render
+    # * :caption - set caption on td    
     #
     #  # Exemples:
     #  <% sorting_table_for @users do |table| %>
@@ -318,7 +323,7 @@ module SortingTableFor
     #
     # the values given to columns can be anything. Only the symbols are the values of the collection.
     # If you give other types (string, image, ...) there won't be interpreted.
-    #    
+    # 
     def columns(*args, &block)
       column_options, html_options = get_column_and_html_options( args.extract_options! )
       @collection.each do |object|
@@ -366,6 +371,7 @@ module SortingTableFor
     # * :as - Force to render a type (:date, :time, :currency)
     # * :format - Set the I18n localization format for :date or :time (:default, :short, ...)
     # * :action - Set an action
+    # * :caption - set caption on td
     #
     #  # Exemple:
     #  <% sorting_table_for @users do |table| %>
@@ -394,7 +400,121 @@ module SortingTableFor
       nil
     end
     
-    # Create a tag caption to set a title to a table
+    # Create a footer around tfoot and tr.
+    # It can be called with or without a block.
+    # These two exemples are equivalent:
+    #
+    #  # With a list:
+    #  <% sorting_table_for @users do |table| %>
+    #    <%= table.footers :username, :firstname %>
+    #  <% end %>
+    #  
+    #  # With a block:
+    #  <% sorting_table_for @users do |table| %>
+    #    <%= table.footers do %>
+    #      <%= table.footer :username %>
+    #      <%= table.footer :firstname %>
+    #    <% end %>
+    #  <% end %>
+    #    
+    #  # Output:
+    #  <table class='sorting_table_for'>
+    #    <tfoot>
+    #      <tr>
+    #        <td>...</td>
+    #        <td>...</td>
+    #      </tr>
+    #    </tfoot>
+    #  </table>
+    #
+    # === Options
+    #
+    # * :html - Hash options: class, id, ...
+    # * :caption - set caption on td
+    #
+    #  # Exemples:
+    #  <% sorting_table_for @users do |table| %>
+    #    <%= table.columns :username, :cation => 5 %>
+    #  <% end %>
+    #
+    # === I18n
+    #
+    # Add a value on scope for footer. Only with symbol.
+    #
+    #  # Exemple of i18n_add_header_action_scope:
+    #  SortingTableFor::TableBuilder.i18n_add_footer_action_scope = :footer
+    #
+    #  # Ouput:
+    #  I18n.t(:edit, :scope => [:current_controller, :current_action]) => en.current_controller.current_action.footer.edit
+    #
+    def footers(*args, &block)
+      column_options, html_options = get_column_and_html_options( args.extract_options! )
+      if block_given?
+        @footer_line = FormatLine.new(args, column_options, html_options, nil, :tfoot)
+        @@template.capture(&block)
+      else
+        @footer_line = FormatLine.new(args, column_options, html_options, @collection.first, :tfoot) if !args.empty?
+      end
+      render_tfoot
+    end
+    
+    # Create a cell of footer, to have more control.
+    # It can be called with or without a block.
+    # The three exemples are equivalent:
+    #  
+    #  # With a block:
+    #  <% sorting_table_for @users do |table| %>
+    #    <%= table.footers do %>
+    #      <%= table.footer :username %>
+    #      <%= table.footer :firstname %>
+    #    <% end %>
+    #  <% end %>
+    #
+    #  # With a block:
+    #  <% sorting_table_for @users do |table| %>
+    #    <%= table.footers do %>
+    #      <%= table.footer do %>
+    #        <%= :username %>
+    #      <% end %>
+    #      <%= table.footer do %>
+    #        <%= :firstname %>
+    #      <% end %>
+    #    <% end %>
+    #  <% end %>    
+    #
+    # === Options
+    #
+    # * :html - Hash options: class, id, ...
+    # * :caption - set caption on td
+    #
+    #  # Exemples:
+    #  <% sorting_table_for @users do |table| %>
+    #    <%= table.columns :username, :cation => 5 %>
+    #  <% end %>
+    #
+    # === I18n
+    #
+    # Add a value on scope for footer. Only with symbol.
+    #
+    #  # Exemple of i18n_add_header_action_scope:
+    #  SortingTableFor::TableBuilder.i18n_add_footer_action_scope = :footer
+    #
+    #  # Ouput:
+    #  I18n.t(:edit, :scope => [:current_controller, :current_action]) => en.current_controller.current_action.footer.edit
+    #
+    # With block the value won't be interpreted.
+    #
+    def footer(*args, &block)
+      if block_given?
+        block = @@template.capture(&block)
+        @footer_line.add_cell(@collection.first, args, nil, block)
+      else
+        @footer_line.add_cell(@collection.first, args)
+      end
+      nil
+    end
+    
+    # Create a tag caption to set a title to the table
     # It can be called with or without a block.
     # The two exemples are equivalent:
     #
@@ -479,6 +599,14 @@ module SortingTableFor
       ''
     end
     
+    # Return the balise tfoot and its content
+    def render_tfoot
+      if @footer_line
+        return Tools::html_safe(content_tag(:tfoot, @footer_line.render_line))
+      end
+      ''
+    end
+    
     # Set default global options
     # init caption to a new hash
     # Set sort to true if the value isn't defined in options
@@ -494,7 +622,9 @@ module SortingTableFor
     def render_total_entries
       if self.show_total_entries
         total_entries = @collection.total_entries rescue @collection.size
-        return Tools::html_safe(content_tag(:tr, content_tag(:td, I18n.t(:total_entries, :scope => :sorting_table_for, :value => total_entries), {:colspan => @lines.first.total_cells}), { :class => 'total-entries' }))
+        header_total_cells = @header_line ? @header_line.total_cells : 0
+        max_cells = (@lines.first.total_cells > header_total_cells) ? @lines.first.total_cells : header_total_cells
+        return Tools::html_safe(content_tag(:tr, content_tag(:td, I18n.t(:total_entries, :scope => :sorting_table_for, :value => total_entries), {:colspan => max_cells}), { :class => 'total-entries' }))
       end
       ''
     end
@@ -523,18 +653,20 @@ module SortingTableFor
       @cells << FormatCell.new(object, args, type, block)
     end
     
-    # Return a tr line based on the type (:thead or :tbody)
+    # Return a tr line based on the type (:thead, :tbody or :tfoot) 
     def render_line
       if @type == :thead
-        header = content_tag(:tr, Tools::html_safe(@cells.collect { |cell| cell.render_cell_thead }.join), @html_options)
+        return content_tag(:tr, Tools::html_safe(@cells.collect { |cell| cell.render_cell_thead }.join), @html_options)
+      elsif @type == :tfoot
+        return content_tag(:tr, Tools::html_safe(@cells.collect { |cell| cell.render_cell_tfoot }.join), @html_options)
       else
         content_tag(:tr, Tools::html_safe(@cells.collect { |cell| cell.render_cell_tbody }.join), @html_options.merge(:class => "#{@html_options[:class]} #{@@template.cycle(:odd, :even)}".strip))
       end
     end
     
-    # Return a string with the total of cells
+    # Return the number of cells in line
     def total_cells
-      @cells.size.to_s
+      @cells.size
     end
     
     protected
@@ -556,14 +688,34 @@ module SortingTableFor
     def can_sort_column?(column)
       model_have_column?(column)
     end
-    
+
+    # Options only for cells
+    def only_cell_option?(key)
+      [:colspan].include? key
+    end
+
+    # Format ask to send options to cell
+    def format_options_to_cell(ask, options = @column_options)
+      options.each do |key, value|
+        if only_cell_option?(key)
+          if ask.is_a? Hash
+            ask.merge!(key => value)
+          else            
+            ask = [ask] unless ask.is_a? Array
+            (ask.last.is_a? Hash and ask.last.has_key? :html) ? ask.last[:html].merge!(key => value) : ask << { :html =>  { key => value }} 
+          end
+        end
+      end
+      ask
+    end
+
     private
     
     # Call after headers or columns with no attributes (table.headers)
     # Create all the cells based on each column in the model's database table
     # Create cell's actions based on option default_actions or on actions given (:actions => [:edit])
     def create_cells
-      @attributes.each { |ask| add_cell(@object, ask) }
+      @attributes.each { |ask| add_cell(@object, format_options_to_cell(ask)) }
       if @args.empty?
         TableBuilder.default_actions.each { |action| add_cell(@object, action, :action) }
       else
@@ -632,7 +784,7 @@ module SortingTableFor
     # Return a td with the formated value or action for headers
     def render_cell_thead
       if @ask
-        cell_value = (@ask.is_a?(Symbol)) ? I18n.t(@ask, {}, true) : @ask
+        cell_value = (@ask.is_a?(Symbol)) ? I18n.t(@ask, {}, :header) : @ask
       else
         cell_value = @block
       end
@@ -642,6 +794,16 @@ module SortingTableFor
       else
         content_tag(:th, cell_value, @html_options)
       end
+    end
+    
+    def render_cell_tfoot
+      if @ask
+        cell_value = (@ask.is_a?(Symbol)) ? I18n.t(@ask, {}, :footer) : @ask
+      else
+        cell_value = @block
+      end
+      cell_value = action_link_to(@options[:action], cell_value) if @type != :action and @options.has_key?(:action)
+      content_tag(:td, cell_value, @html_options)
     end
     
     private
@@ -658,6 +820,7 @@ module SortingTableFor
     def set_default_options
       @html_options = {} unless defined? @html_options
       @options = {} unless defined? @options
+      @html_options = format_options_to_cell(@html_options, @options)
       @options[:sort] = @@options[:sort] if !@options.has_key? :sort
     end
     

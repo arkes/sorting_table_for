@@ -55,6 +55,13 @@ describe SortingTableFor, :type => :helper do
         helper.output_buffer.should have_comp_tag("table[class='table_class sorting_table_for'][id=table_id]")
       end
       
+      it "should have option colspan" do
+        table_html = helper.sorting_table_for(@users) do |table|
+          html = table.headers :colspan => 5
+          html.should have_comp_tag('th[colspan="5"]', :count => User.content_columns.size)          
+        end
+      end      
+
     end
        
     describe ' #custom headers' do
@@ -106,6 +113,13 @@ describe SortingTableFor, :type => :helper do
           html.should have_comp_tag("th:nth-child(3)", :text => 'hello')
           html.should have_comp_tag("th:nth-child(4)", :text => 'Hello fake')
           html.should have_comp_tag("th:nth-child(5)", :text => 'Edit users')          
+        end
+      end
+
+      it "should have option colspan" do
+        table_html = helper.sorting_table_for(@users) do |table|
+          html = table.headers :username, :colspan => 5
+          html.should have_comp_tag('th[colspan="5"]', :count => 1)
         end
       end
       
@@ -206,6 +220,17 @@ describe SortingTableFor, :type => :helper do
         end        
       end      
       
+      it "should have option colspan" do
+        table_html = helper.sorting_table_for(@users) do |table|
+          html = table.headers do
+            table.header :username, :colspan => 5
+            table.header :price, :colspan => 3
+          end
+          html.should have_comp_tag('th[colspan="5"]', :count => 1)
+          html.should have_comp_tag('th[colspan="3"]', :count => 1)
+        end
+      end      
+      
     end
     
     describe ' #custom sub header' do
@@ -291,6 +316,21 @@ describe SortingTableFor, :type => :helper do
         helper.output_buffer.should have_comp_tag("table[class='table_class sorting_table_for'][id=table_id]")
       end
       
+      it "should have option colspan" do
+        table_html = helper.sorting_table_for(@users) do |table|
+          html = table.headers do
+            table.header :colspan => 5 do
+              'my_colspan'
+            end
+            table.header :colspan => 3 do
+              'my_colspan_2'
+            end
+          end
+          html.should have_comp_tag('th[colspan="5"]', :count => 1)
+          html.should have_comp_tag('th[colspan="3"]', :count => 1)
+        end
+      end
+      
     end
     
     describe ' #With editable options' do
@@ -298,8 +338,9 @@ describe SortingTableFor, :type => :helper do
       before :each do
         ## Restaure default values
         SortingTableFor::TableBuilder.reserved_columns = [:id, :password, :salt]
-        SortingTableFor::TableBuilder.default_actions = [:edit, :delete]        
-        SortingTableFor::TableBuilder.params_sort_table = :table_sort        
+        SortingTableFor::TableBuilder.default_actions = [:edit, :delete]
+        SortingTableFor::TableBuilder.params_sort_table = :table_sort
+        SortingTableFor::TableBuilder.i18n_add_header_action_scope = :header 
       end
       
       it "should edit reserved columns" do
@@ -327,6 +368,15 @@ describe SortingTableFor, :type => :helper do
         pending('check if the link is valid')
         SortingTableFor::TableBuilder.default_actions = [:show, :edit_password]
         helper.sorting_table_for(@users) do |table|
+        end
+      end
+      
+      it "should change the i18n add" do
+        SortingTableFor::TableBuilder.i18n_add_header_action_scope = :footer
+        helper.sorting_table_for(@users) do |table|
+          html = table.headers :username, :price
+          html.should have_comp_tag('th:nth-child(1)', :text => 'UserFoot')
+          html.should have_comp_tag('th:nth-child(2)', :text => 'PriceFoot')
         end
       end
       

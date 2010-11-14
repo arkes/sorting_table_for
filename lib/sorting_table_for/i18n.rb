@@ -11,14 +11,15 @@ module SortingTableFor
       
       # Translate
       # Add a default scope if option scope isn't defined
-      def translate(attribute, options = {}, action_header = false)
+      def translate(attribute, options = {}, type = nil)
         if !@i18n_active
           return options[:value] if options.has_key? :value
           return attribute
         end
         if !options.has_key? :scope
           options[:scope] = create_scope 
-          options[:scope] << TableBuilder.i18n_add_header_action_scope if action_header
+          options[:scope] << TableBuilder.i18n_add_header_action_scope if type and type == :header
+          options[:scope] << TableBuilder.i18n_add_footer_action_scope if type and type == :footer
         end
         ::I18n.t(attribute, options)
       end

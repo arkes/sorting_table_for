@@ -6,9 +6,8 @@ SortingTableFor is a Rails TableBuilder made to easily create table or sort a ta
 
 ## Infos
 
-- It's Rails 2.3 and 3 compatible
+- It's Rails 2 and 3 compatible
 - I18n compatible
-- Almost fully configurable
 
 ## Installation
 
@@ -24,154 +23,175 @@ Alternatively, you can install it as a plugin.
 
     rails plugin install git://github.com/arkownz/sorting_table_for.git
 
-
 ## Usage
 
-To create a simple table
+To create a quick table
 
-    <%- sorting_table_for @users do |table| %>
+    <% sorting_table_for @users do |table| %>
       <%= table.headers %>
       <%= table.columns %>
-    <%- end %>
+    <% end %>
 
 will render
 
     <table>
       <thead>
         <tr>
-          <th><a href='/to_sort'>Username</a></th>
-          <th><a href='/to_sort'>Firstname</a></th>
+          <th class='cur-sort-not'><a href='/my_link?table_sort[username]=asc'>...</a></th>
+          <th class='cur-sort-not'><a href='/my_link?table_sort[firstname]=asc'>...</a></th>
           <th>Edit</th>
           <th>Delete</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td colspan='4'>Total rows : 1</td>
+          <td colspan='4' class='total-entries'>Total Entries: 2</td>
         </tr>
         <tr>
           <td>Test</td>
           <td>Myname</td>
-          <td><a href='/to_edit'>Edit</a></td>
-          <td><a href='/to_delete'>Delete</a></td>
+          <td><a href='/users/1/edit'>Edit</a></td>
+          <td><a href='/users/1'>Delete</a></td>
         <tr>
       </tbody>
     </table>
 
-You can specify columns and headers
+column and header can be called with a list
 
-    <%- sorting_table_for @users do |table| %>
+    <% sorting_table_for @users do |table| %>
       <%= table.headers :username, :firstname, :lastname %>
       <%= table.columns :username, :firstname, :lastname %>
-    <%- end %>
+    <% end %>
 
-On columns you can get the object of your collection.
-Your can pass to column or header what ever your want: symbol, string, image, ...
+On columns you can get the current object of your collection.
+You can give to column or header whatever you want: symbol, string, image, ...
 
-    <%- sorting_table_for @users do |table| %>
+    <% sorting_table_for @users do |table| %>
       <%= table.headers do %>
         <%= table.header :username %>
         <%= table.header :firstname %>
         <%= table.header image_tag('rails.png') %>
-      <%- end %>
+      <% end %>
       <%= table.columns do |user| %>
         <%= table.column :username %>
         <%= table.column user.firstname %>
         <%= table.column 'exemple' %>
-      <%- end %>
-    <%- end %>
+      <% end %>
+    <% end %>
     
-For more control on headers or columns
+column and header can be called with a block
 
-    <%- sorting_table_for @users do |table| %>
+    <% sorting_table_for @users do |table| %>
       <%= table.headers do %>
         <%= table.header do %>
           <%= image_tag('rails.png') %>
-        <%- end %>
-      <%- end %>
-      <%= table.columns do |val| %>
+        <% end %>
+      <% end %>
+      <%= table.columns do |user| %>
         <%= table.column do %>
-          <%= val.username.downcase %>
-        <%- end %>
-      <%- end %>
-    <%- end %>
+          <%= user.username.downcase %>
+        <% end %>
+      <% end %>
+    <% end %>
 
-By default SortingTableFor will customize your table
+### Footer
 
-Header:
+You can set a footer to the table, it can be called with a list or a block
 
-- On symbol it make by default a sorting
-- On symbol it will add the translation (I18n.t)
-- On sorting it will add a class with an image to show the sort order
+    <% sorting_table_for @users do |table| %>
+      <%= table.footers :footer %>
+    <% end %>
 
-Column:
+    -- equivalent --
 
-- On Symbol it will find the value in collection
-- On Object Date or DateTime it will add the localization (I18n.l)
-- On Column name (price, total_price, ...) it will the currency
-- On Boolean it will add the translation (I18n.t) true or false
+    <% sorting_table_for @users do |table| %>
+      <%= table.footers do %>
+        <%= table.footer :footer %>
+      <% end %>
+    <% end %>
 
-You can customize the table
+### Caption
 
-    <%- sorting_table_for @users do |table| %>
+Create a tag caption to set a title to the table, it can be called
+with or without a block
+
+    <% sorting_table_for @users do |table| %>
+      <%= table.caption 'my title' %>
+    <% end %>
+
+### Options
+
+- :html     Hash options: class, id, ...
+- :as       Force to render a type (:date, :time, :currency)
+- :format   Set the I18n localization format for :date or :time (:default, :short, ...)
+- :action   Set an action
+- :caption  Set caption on td
+- :actions  Set actions to render
+- :only     Columns to render (on list)
+- :except   Columns to not render (on list)
+- :sort     Add or not sorting (true of false)
+
+Exemple
+
+    <% sorting_table_for @users do |table| %>
       <%= table.headers do %>
         <%= table.header :username %>
         <%= table.header :price, :sort => false %>
         <%= table.header :created_at %>
         <%= table.header 'today' %>
-      <%- end %>
+      <% end %>
       <%= table.columns do |user| %>
         <%= table.column user.username %>
         <%= table.column user.price, :as => :currency %>
         <%= table.column user.created, :as => :date %>
         <%= table.column DateTime.now, :as => :datetime, :format => :short %>
-      <%- end %>
-    <%- end %>
+      <% end %>
+    <% end %>
 
-You can customize the table with action
+Exemple with action
 
-    <%- sorting_table_for @users do |table| %>
+    <% sorting_table_for @users do |table| %>
       <%= table.headers do %>
         <%= table.header :username %>
         <%= table.header :action => :edit %>
-      <%- end %>
+      <% end %>
       <%= table.columns do |user| %>
         <%= table.column user.username, :action => :show %>
         <%= table.column :action => :edit %>
-      <%- end %>
-    <%- end %>
+      <% end %>
+    <% end %>
 
-You can customize the html and add title
+Exemple with html
 
-    <%- sorting_table_for @users, :html => { :class => 'my_table' } do |table| %>
+    <% sorting_table_for @users, :html => { :class => 'my_table' } do |table| %>
       <%= table.headers :html => { :class => 'my_headers', :title => 'column !' } do %>
         <%= table.header :username :html => { :class => 'header_username' } %>
         <%= table.header :firstname :html => { :title => 'hello price' } %>
-      <%- end %>
+      <% end %>
       <%= table.columns :html => { :class => 'my_columns' } do |user| %>
         <%= table.column :username :html => { :class => 'column_username' }%>
-        <%= table.column :firstname :html => { :title => "it's #{val.firstname}" } %>
-      <%- end %>
-    <%- end %>
+        <%= table.column :firstname :html => { :title => "it's #{user.firstname}" } %>
+      <% end %>
+    <% end %>
 
 ## Namespace
 
 SortingTableFor can use your namespace
 
-    <%- sorting_table_for [:admin, @users] do |table| %>
+    <% sorting_table_for [:admin, @users] do |table| %>
       <%= table.headers %>
       <%= table.columns %>
-    <%- end %>
+    <% end %>
 
 ## Sorting
 
-To add sorting in your query, you just have to add sorting_table in your query
+To add sort in your query, you just have to add sorting_table in your query
 
     def index
       @users = User.sorting_table(params).all
     end
 
-to add a default sorting 
+to add a default sorting
 
     def index
       @users = User.sorting_table(params, :username).all
@@ -187,32 +207,31 @@ to add a default sorting
 
 You can add ajax on sorting
 
-        <%- sorting_table_for @users, :sort_remote => true do |table| %>
+        <% sorting_table_for @users, :sort_remote => true do |table| %>
           <%= table.headers %>
           <%= table.columns %>
-        <%- end %>
+        <% end %>
 
 You can add ajax on links
 
-        <%- sorting_table_for @users, :link_remote => true do |table| %>
-            <%= table.headers %>
-            <%= table.columns %>
-        <%- end %>
-
-## Stylesheet
-
-there are a default stylesheet in _stylesheet_
-
-- A class 'odd' or 'even' on rows
-- A class 'cur-sort-not', 'cur-sort-asc' or 'cur-sort-desc' on headers that you want to sort
-
-[_Here an exemple of css file_][]
+        <% sorting_table_for @users, :link_remote => true do |table| %>
+          <%= table.headers %>
+          <%= table.columns %>
+        <% end %>
 
 ## Configurations
 
-There are some options that you can customize in your initiatilizer
+There are some options that you can modify in your initiatilizer
 
 [_see the initializer file exemple for more explanation_][]
+
+## Stylesheet
+
+- Class 'odd' or 'even' on rows
+- Class 'cur-sort-not', 'cur-sort-asc' or 'cur-sort-desc' on sorting headers
+- Class 'total-entries' on total entries
+
+[_Here an exemple of css file_][]
 
 Copyright (c) 2010 arkownz (Thomas Floch), released under the MIT license
 

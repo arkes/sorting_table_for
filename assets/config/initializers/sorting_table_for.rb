@@ -16,7 +16,7 @@
 
 ## Show the total entries in table
 ## true or false
-## SortingTableFor::TableBuilder.show_total_entries = false
+## SortingTableFor::TableBuilder.show_total_entries = true
 
 ## The name of the url params for sorting
 ## SortingTableFor::TableBuilder.params_sort_table = :table_sort
@@ -38,5 +38,8 @@
 ## Keywords are: namespace, controller, action, model
 ## SortingTableFor::TableBuilder.i18n_default_scope = [:namespace, :controller, :action]
 
-## This value is add by default on scope for header of actions
+## This value is add a value by default header's scope
 ## SortingTableFor::TableBuilder.i18n_add_header_action_scope = :header
+
+## This value is add a value by default footer's scope
+## SortingTableFor::TableBuilder.i18n_add_footer_action_scope = :footer
