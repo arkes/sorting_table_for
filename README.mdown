@@ -121,15 +121,23 @@ with or without a block
 
 ### Options
 
-- :html     Hash options: class, id, ...
-- :as       Force to render a type (:date, :time, :currency)
-- :format   Set the I18n localization format for :date or :time (:default, :short, ...)
-- :action   Set an action
-- :caption  Set caption on td
-- :actions  Set actions to render
-- :only     Columns to render (on list)
-- :except   Columns to not render (on list)
-- :sort     Add or not sorting (true of false)
+- :html => Hash options: class, id, ...
+- :as => Force to render a type (:date, :time, :currency)
+- :format => Set the I18n localization format for :date or :time (:default, :short, ...)
+- :action => Set an action
+- :caption => Set caption on td
+- :actions => Set actions to render
+- :only => Columns to render (on list)
+- :except => Columns to not render (on list)
+- :sort => Add or not sorting (true of false)
+
+Options for sorting table for
+
+- :builder => Set a table builder
+- :html => Set html options (id, class, ...)
+- :remote_link => To set actions link with ajax (true or false)
+- :remote_sort => To set link for sorting with ajax (true of false)
+- :i18n => To use or not i18n on values (true or false)
 
 Exemple
 

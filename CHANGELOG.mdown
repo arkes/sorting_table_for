@@ -1,5 +1,13 @@
 # CHANGELOG
 
+### Version 0.2.0 _(November 14, 2010)_
+
+* Add footers and footer
+* Add caption
+* Add option colspan
+* Add option i18n
+* Change name on licence
+
 ### Version 0.1.2 _(November 02, 2010)_
 
 * Problem with date

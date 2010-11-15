@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name = "sorting_table_for"
-  s.version = "0.1.2"
-  s.date = "2010-11-02"
+  s.version = "0.2.0"
+  s.date = "2010-11-14"
   s.author = "Thomas Floch"
   s.email = "thomas.floch@gmail.com"
   s.homepage = "http://github.com/arkownz/sorting_table_for"
@@ -11,7 +11,12 @@ Gem::Specification.new do |s|
   s.extra_rdoc_files = ["README.mdown"]
   s.rdoc_options = ["--charset=UTF-8"]
   
-  s.files = Dir["{lib,spec}/**/*", "[A-Z]*", "init.rb"]
+  s.files = Dir["{lib,spec,assets}/**/*",
+                "init.rb",
+                "CHANGELOG.mdown",
+                "MIT-LICENSE",
+                "Rakefile"]
+                
   s.require_path = "lib"
 
   s.rubyforge_project = s.name
