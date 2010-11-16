@@ -28,7 +28,13 @@ describe SortingTableModelScope do
     end
     
     it "should not erase other order" do
-      User.sorting_table(nil, :firstname, :desc).find(:all, :order => 'lastname asc').should == User.find(:all, :order => 'lastname asc, firstname desc')
+      # Change order with scope in rails 3.0.3
+      if !defined? ActionPack or (ActionPack::VERSION::MAJOR <= 3 and ActionPack::VERSION::MINOR == 0 and ActionPack::VERSION::TINY <= 1)
+        current_order = 'lastname asc, firstname desc'
+      else
+        current_order = 'firstname desc, lastname asc'
+      end
+      User.sorting_table(nil, :firstname, :desc).find(:all, :order => 'lastname asc').should == User.find(:all, :order => current_order)
     end
     
   end
