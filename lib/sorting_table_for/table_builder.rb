@@ -30,7 +30,7 @@ module SortingTableFor
     def initialize(collection, object_or_array, template, options, params)
       @collection, @@object_or_array, @@template, @@options, @@params = collection, object_or_array, template, options, params
       set_default_global_options
-      I18n.set_options(params, model_name(@collection.first), object_or_array.first, @@options[:i18n])
+      I18n.set_options(params, model_name(@collection.first), @@options[:i18n])
       @lines = []
     end
     
@@ -599,6 +599,7 @@ module SortingTableFor
     def render_tbody
       if @lines and @lines.size > 0
         return Tools::html_safe(content_tag(:tbody, render_total_entries + Tools::html_safe(@lines.collect { |line| line.render_line }.join)))
+        return Tools::html_safe(content_tag(:tr, content_tag(:td, I18n.t(:total_entries, :scope => :sorting_table_for, :value => total_entries), {:colspan => max_cells}), { :class => 'total-entries' }))
       end
       ''
     end
@@ -667,30 +668,25 @@ module SortingTableFor
         content_tag(:tr, Tools::html_safe(@cells.collect { |cell| cell.render_cell_tbody }.join), @html_options.merge(:class => "#{@html_options[:class]} #{@@template.cycle(:odd, :even)}".strip))
       end
     end
-
+    
     # Return the number of cells in line
     def total_cells
       @cells.size
     end
-
+    
     protected
-
+    
     # Return each column in the model's database table
     def content_columns
       model_name(@object).constantize.content_columns.collect { |c| c.name.to_sym }.compact rescue []
     end
-
+    
     # Return true if the column is in the model's database table
     def model_have_column?(column)
       model_name(@object).constantize.content_columns.each do |model_column|
         return true if model_column.name == column.to_s
       end
       false
-    end
-
-    # Return true if the column is in the model's database table
-    def can_sort_column?(column)
-      model_have_column?(column)
     end
 
     # Options only for cells
@@ -769,7 +765,7 @@ module SortingTableFor
         @ask = args
       end
       set_default_options
-      @can_sort = true if @options and @options[:sort] and can_sort_column?(@ask)
+      can_sort_column?
     end
     
     # Return a td with the formated value or action for columns
@@ -792,9 +788,10 @@ module SortingTableFor
       else
         cell_value = @block
       end
-      if @can_sort and @options[:sort]
-        @html_options.merge!(:class => "#{@html_options[:class]} #{sorting_html_class}".strip)
-        content_tag(:th, sort_link_to(cell_value), @html_options)
+      if @can_sort
+        sort_on = @options[:sort_as] || @ask
+        @html_options.merge!(:class => "#{@html_options[:class]} #{sorting_html_class(sort_on)}".strip)
+        content_tag(:th, sort_link_to(cell_value, sort_on), @html_options)
       else
         content_tag(:th, cell_value, @html_options)
       end
@@ -815,6 +812,11 @@ module SortingTableFor
     # Return options and html options for a cell
     def get_cell_and_html_options(options)
       return options, options.delete(:html) || {}
+    end
+    
+    # set to true if column is sortable
+    def can_sort_column?
+      @can_sort = true if @options[:sort] and model_have_column?(@options[:sort_as] || @ask)
     end
     
     # Set default options for cell
@@ -845,8 +847,8 @@ module SortingTableFor
     end
     
     # Create sorting link
-    def sort_link_to(name)
-      create_link_to(name, sort_url, @@options[:sort_remote])
+    def sort_link_to(name, sort_on)
+      create_link_to(name, sort_url(sort_on), @@options[:sort_remote])
     end
     
     # Create the link based on object
@@ -864,40 +866,40 @@ module SortingTableFor
     
     # Return a string with html class of sorting for headers
     # The html class is based on option: SortingTableFor::TableBuilder.html_sorting_class
-    def sorting_html_class
-      return TableBuilder.html_sorting_class.first if current_sorting.nil?
-      return TableBuilder.html_sorting_class.second if current_sorting == :asc
+    def sorting_html_class(sort_on)
+      return TableBuilder.html_sorting_class.first if current_sorting(sort_on).nil?
+      return TableBuilder.html_sorting_class.second if current_sorting(sort_on) == :asc
       TableBuilder.html_sorting_class.third
     end
     
     # Return an url for sorting
     # Add the param sorting_table[name]=direction to the url
     # Add the default direction: :asc
-    def sort_url
+    def sort_url(sort_on)
       url_params = @@params.clone
       if url_params.has_key? TableBuilder.params_sort_table
-        if url_params[TableBuilder.params_sort_table].has_key? @ask
-          url_params[TableBuilder.params_sort_table][@ask] = inverse_sorting
+        if url_params[TableBuilder.params_sort_table].has_key? sort_on
+          url_params[TableBuilder.params_sort_table][sort_on] = inverse_sorting(sort_on)
           return url_for(url_params)
         end
-        url_params[TableBuilder.params_sort_table].delete @ask
+        url_params[TableBuilder.params_sort_table].delete sort_on
       end
-      url_params[TableBuilder.params_sort_table] = { @ask => :asc }
+      url_params[TableBuilder.params_sort_table] = { sort_on => :asc }
       url_for(url_params)
     end
     
     # Return a symbol of the current sorting (:asc, :desc, nil)
-    def current_sorting
-      if @@params.has_key? TableBuilder.params_sort_table and @@params[TableBuilder.params_sort_table].has_key? @ask
-        return @@params[TableBuilder.params_sort_table][@ask].to_sym
+    def current_sorting(sort_on)
+      if @@params.has_key? TableBuilder.params_sort_table and @@params[TableBuilder.params_sort_table].has_key? sort_on
+        return @@params[TableBuilder.params_sort_table][sort_on].to_sym
       end
       nil
     end
     
     # Return a symbol, the inverse of the current sorting
-    def inverse_sorting
-      return :asc if current_sorting.nil?
-      return :desc if current_sorting == :asc
+    def inverse_sorting(sort_on)
+      return :asc if current_sorting(sort_on).nil?
+      return :desc if current_sorting(sort_on) == :asc
       :asc
     end
     

@@ -220,9 +220,31 @@ describe SortingTableFor, :type => :helper do
           end
           html.should have_comp_tag("th:nth-child(1)[class=cur-sort-not]")
           html.should_not have_comp_tag("th:nth-child(2)[class=cur-sort-not]")
-        end        
-      end      
+        end
+      end
       
+      it "should works with options sort_as" do
+        helper.sorting_table_for(@users) do |table|
+          html = table.headers do
+            table.header 'my name', :sort_as => :username
+          end
+          html.should have_comp_tag("th:nth-child(1)", :text => 'my name')
+          html.should have_comp_tag("th:nth-child(1)[class=cur-sort-not]")
+        end
+      end
+
+      it "should works with options sort_as and sort" do
+        helper.sorting_table_for(@users, :sort => false) do |table|
+          html = table.headers do
+            table.header 'my name', :sort_as => :username, :sort => true
+            table.header :price
+          end
+          html.should have_comp_tag("th:nth-child(1)", :text => 'my name')
+          html.should have_comp_tag("th:nth-child(1)[class=cur-sort-not]")
+          html.should_not have_comp_tag("th:nth-child(2)[class=cur-sort-not]")
+        end
+      end
+
       it "should have option colspan" do
         table_html = helper.sorting_table_for(@users) do |table|
           html = table.headers do
