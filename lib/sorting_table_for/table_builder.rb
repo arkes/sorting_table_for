@@ -6,8 +6,7 @@ module SortingTableFor
   
   class TableBuilder
     
-    include ::ActionView::Helpers::TagHelper
-    include ::ActionView::Helpers::NumberHelper
+    include ::ActionView::Helpers
     
     class_inheritable_accessor :reserved_columns, :currency_columns,
                                :default_boolean, :show_total_entries,
@@ -135,7 +134,7 @@ module SortingTableFor
       column_options, html_options = get_column_and_html_options( args.extract_options! )
       if block_given?
         @header_line = FormatLine.new(args, column_options, html_options, nil, :thead)
-        @@template.capture(&block)
+        capture(&block)
       else
         @header_line = FormatLine.new(args, column_options, html_options, @collection.first, :thead)
       end
@@ -184,7 +183,7 @@ module SortingTableFor
     #
     def header(*args, &block)
       if block_given?
-        block = @@template.capture(&block)
+        block = capture(&block)
         @header_line.add_cell(@collection.first, args, nil, block)
       else
         @header_line.add_cell(@collection.first, args)
@@ -392,7 +391,7 @@ module SortingTableFor
     #    
     def column(*args, &block)
       if block_given?
-        block = @@template.capture(&block)
+        block = capture(&block)
         @lines.last.add_cell(@current_object, args, nil, block)
       else
         @lines.last.add_cell(@current_object, args)
@@ -451,7 +450,7 @@ module SortingTableFor
       column_options, html_options = get_column_and_html_options( args.extract_options! )
       if block_given?
         @footer_line = FormatLine.new(args, column_options, html_options, nil, :tfoot)
-        @@template.capture(&block)
+        capture(&block)
       else
         @footer_line = FormatLine.new(args, column_options, html_options, @collection.first, :tfoot) if !args.empty?
       end
@@ -506,7 +505,7 @@ module SortingTableFor
     #
     def footer(*args, &block)
       if block_given?
-        block = @@template.capture(&block)
+        block = capture(&block)
         @footer_line.add_cell(@collection.first, args, nil, block)
       else
         @footer_line.add_cell(@collection.first, args)
@@ -557,7 +556,7 @@ module SortingTableFor
     def caption(*args, &block)
       @caption[:option], @caption[:html] = get_column_and_html_options( args.extract_options! )
       if block_given?
-        @caption[:value] = @@template.capture(&block)
+        @caption[:value] = capture(&block)
       else
         @caption[:value] = (args.empty?) ? I18n.t(:table_caption) : args.first;
       end
@@ -569,6 +568,11 @@ module SortingTableFor
     # Return the name of the model
     def model_name(object)
       object.present? ? object.class.name : object.to_s.classify
+    end
+    
+    # Send method to ActionView
+    def method_missing(name, *args, &block)
+      @@template.send(name, *args, &block)
     end
     
     private
@@ -663,19 +667,19 @@ module SortingTableFor
         content_tag(:tr, Tools::html_safe(@cells.collect { |cell| cell.render_cell_tbody }.join), @html_options.merge(:class => "#{@html_options[:class]} #{@@template.cycle(:odd, :even)}".strip))
       end
     end
-    
+
     # Return the number of cells in line
     def total_cells
       @cells.size
     end
-    
+
     protected
-    
+
     # Return each column in the model's database table
     def content_columns
       model_name(@object).constantize.content_columns.collect { |c| c.name.to_sym }.compact rescue []
     end
-    
+
     # Return true if the column is in the model's database table
     def model_have_column?(column)
       model_name(@object).constantize.content_columns.each do |model_column|
@@ -683,7 +687,7 @@ module SortingTableFor
       end
       false
     end
-    
+
     # Return true if the column is in the model's database table
     def can_sort_column?(column)
       model_have_column?(column)
@@ -747,7 +751,7 @@ module SortingTableFor
         content_columns
       end
     end
-
+    
   end
 
   class FormatCell < FormatLine
@@ -850,12 +854,12 @@ module SortingTableFor
     # Compatible with rails 2 and 3.
     def create_link_to(block, url, remote, method = nil, confirm = nil)
       if remote and Tools::rails3?
-        return @@template.link_to(block, url, :method => method, :confirm => confirm, :remote => true)
+        return link_to(block, url, :method => method, :confirm => confirm, :remote => true)
       elsif remote
         method = :get if method.nil?
-        return @@template.link_to_remote(block, { :url => url, :method => method, :confirm => confirm })
+        return link_to_remote(block, { :url => url, :method => method, :confirm => confirm })
       end
-      @@template.link_to(block, url, :method => method, :confirm => confirm)
+      link_to(block, url, :method => method, :confirm => confirm)
     end
     
     # Return a string with html class of sorting for headers
@@ -874,12 +878,12 @@ module SortingTableFor
       if url_params.has_key? TableBuilder.params_sort_table
         if url_params[TableBuilder.params_sort_table].has_key? @ask
           url_params[TableBuilder.params_sort_table][@ask] = inverse_sorting
-          return @@template.url_for(url_params)
+          return url_for(url_params)
         end
         url_params[TableBuilder.params_sort_table].delete @ask
       end
       url_params[TableBuilder.params_sort_table] = { @ask => :asc }
-      @@template.url_for(url_params)
+      url_for(url_params)
     end
     
     # Return a symbol of the current sorting (:asc, :desc, nil)
