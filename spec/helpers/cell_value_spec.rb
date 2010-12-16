@@ -7,10 +7,13 @@ include SortingTableForSpecHelper
 
 describe SortingTableFor, :type => :helper do
 
+  before :all do
+    (Tools::rails3?) ? routes_rails3 : routes_rails2
+  end
+
   before :each do
     @users = User.all
-    helper.stub!(:url_for).and_return('fake_link')
-    helper.stub!(:params).and_return({ :controller => 'fakes', :action => 'index' })
+    helper.stub!(:params).and_return({ :controller => 'users', :action => 'index' })
     helper.output_buffer = ''
     SortingTableFor::TableBuilder.default_boolean = [I18n.t(:bool_true, :scope => [:sorting_table_for, :columns]), I18n.t(:bool_false, :scope => [:sorting_table_for, :columns])]      
     SortingTableFor::TableBuilder.i18n_default_format_date = :default

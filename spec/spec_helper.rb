@@ -56,6 +56,24 @@ module SortingTableForSpecHelper
   include ActiveSupport
   include SortingTableFor
   
+  def routes_rails2
+    ActionController::Routing::Routes.clear!
+      ActionController::Routing::Routes.draw do |map|
+        map.resources :users, :member => { :edit_password => :get }
+    end
+  end
+  
+  def routes_rails3
+    Rails.application.routes.clear!
+    Rails.application.routes.draw do
+      resources :users do
+        member do
+          get :edit_password
+        end
+      end
+    end
+  end
+  
   def have_comp_tag(selector, options = {})
     if ::SortingTableFor::Tools::rails3?
       if options.has_key? :text
