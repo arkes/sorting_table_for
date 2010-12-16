@@ -9,11 +9,12 @@ describe SortingTableFor do
   describe ' #i18n' do
     
     before :each do
-      SortingTableFor::I18n.set_options({:controller => 'fakes_controller', :action => 'fake_action'}, 'user', '')
+      SortingTableFor::TableBuilder.i18n_default_scope = [ :namespace, :controller, :action ]
+      SortingTableFor::I18n.set_options({:controller => 'fakes_controller', :action => 'fake_action'}, 'user')
     end
     
     it "should works by default" do
-      SortingTableFor::I18n.set_options({}, 'user', '')
+      SortingTableFor::I18n.set_options({}, 'user')
       SortingTableFor::I18n.t(:test_name).should == 'i18n name'
     end
     
@@ -28,12 +29,16 @@ describe SortingTableFor do
     it "should works with i18n options" do
       SortingTableFor::I18n.t(:my_test, :value => :hello).should == 'say hello'
     end
+
+    it "should works with options add_scope" do
+      SortingTableFor::I18n.t(:name, :add_scope => [:add_scope]).should == 'add to scope'
+    end
     
     it "should set namespace scope" do
-      SortingTableFor::I18n.set_options({:controller => 'fakes_controller', :action => 'fake_action'}, 'user', 'fake_namespace')
+      SortingTableFor::I18n.set_options({:controller => 'fake_namespace/fakes_controller', :action => 'fake_action'}, 'user')
       SortingTableFor::I18n.t(:name).should == 'fake namespace'
     end
-
+    
     it "should set scope with options" do
       SortingTableFor::TableBuilder.i18n_default_scope = [ :action ]
       SortingTableFor::I18n.t(:name).should == 'fake action'
@@ -41,7 +46,7 @@ describe SortingTableFor do
     
     it "should set scope with all options" do
       SortingTableFor::TableBuilder.i18n_default_scope = [ :model, :namespace, :controller, :action ]
-      SortingTableFor::I18n.set_options({:controller => 'fakes_controller', :action => 'fake_action'}, 'user', 'fake_namespace')
+      SortingTableFor::I18n.set_options({:controller => 'fake_namespace/fakes_controller', :action => 'fake_action'}, 'user')
       SortingTableFor::I18n.t(:name).should == 'fake'
     end
     

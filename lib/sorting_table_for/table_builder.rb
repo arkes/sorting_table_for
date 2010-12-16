@@ -628,7 +628,7 @@ module SortingTableFor
         total_entries = @collection.total_entries rescue @collection.size
         header_total_cells = @header_line ? @header_line.total_cells : 0
         max_cells = (@lines.first.total_cells > header_total_cells) ? @lines.first.total_cells : header_total_cells
-        return Tools::html_safe(content_tag(:tr, content_tag(:td, I18n.t(:total_entries, :scope => :sorting_table_for, :value => total_entries), {:colspan => max_cells}), { :class => 'total-entries' }))
+        return Tools::html_safe(content_tag(:tr, content_tag(:td, I18n.t(:total_entries, :value => total_entries), {:colspan => max_cells}), { :class => 'total-entries' }))
       end
       ''
     end

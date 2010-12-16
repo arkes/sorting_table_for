@@ -42,12 +42,11 @@ test:
         strip_insignificant_zeros: false
     
   sorting_table_for:
-    total_entries: "Total Entries {{value}}"
     columns:
       bool_true: 'True'
       bool_false: 'False'      
   
-  fakes:
+  users:
     index:
       table_caption: 'Quick Caption'
       edit: 'Edit'
@@ -68,6 +67,7 @@ test:
       footer:
         username: 'UserFoot'
         price: 'PriceFoot'
+      total_entries: "Total Entries %{value}"
 
   fake_scope:
     my_test: 'Hello'
@@ -79,6 +79,8 @@ test:
       my_test: 'say {{value}}'
       my_add:
         name: 'fake add'
+      add_scope:
+        name: "add to scope"        
 
   user:
     fake_namespace:
