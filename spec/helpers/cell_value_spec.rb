@@ -1,19 +1,19 @@
 # encoding: utf-8
 
 require 'spec_helper'
-require File.expand_path(File.dirname(__FILE__) + '/../fixtures/user')
+require File.expand_path(File.dirname(__FILE__) + '/../fixtures/sorting_table_for_user')
 
 include SortingTableForSpecHelper
 
 describe SortingTableFor, :type => :helper do
 
   before :all do
-    (Tools::rails3?) ? routes_rails3 : routes_rails2
+    (SortingTableFor::Tools::rails3?) ? routes_rails3 : routes_rails2
   end
 
   before :each do
-    @users = User.all
-    helper.stub!(:params).and_return({ :controller => 'users', :action => 'index' })
+    @users = SortingTableForUser.all
+    helper.stub!(:params).and_return({ :controller => 'sorting_table_for_users', :action => 'index' })
     helper.output_buffer = ''
     SortingTableFor::TableBuilder.default_boolean = [I18n.t(:bool_true, :scope => [:sorting_table_for, :columns]), I18n.t(:bool_false, :scope => [:sorting_table_for, :columns])]      
     SortingTableFor::TableBuilder.i18n_default_format_date = :default

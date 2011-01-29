@@ -1,4 +1,5 @@
 test:
+
   date:
     formats:
       default: "%Y-%m-%d"
@@ -46,7 +47,7 @@ test:
       bool_true: 'True'
       bool_false: 'False'
   
-  users:
+  sorting_table_for_users:
     index:
       table_caption: 'Quick Caption'
       edit: 'Edit'

@@ -59,14 +59,14 @@ module SortingTableForSpecHelper
   def routes_rails2
     ActionController::Routing::Routes.clear!
       ActionController::Routing::Routes.draw do |map|
-        map.resources :users, :member => { :edit_password => :get }
+        map.resources :sorting_table_for_users, :member => { :edit_password => :get }
     end
   end
   
   def routes_rails3
     Rails.application.routes.clear!
     Rails.application.routes.draw do
-      resources :users do
+      resources :sorting_table_for_users do
         member do
           get :edit_password
         end

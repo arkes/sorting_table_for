@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 require 'spec_helper'
-require File.expand_path(File.dirname(__FILE__) + '/../fixtures/user')
+require File.expand_path(File.dirname(__FILE__) + '/../fixtures/sorting_table_for_user')
 
 include SortingTableForSpecHelper
 

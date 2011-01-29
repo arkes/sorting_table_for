@@ -1,9 +1,16 @@
 test:
+
   date:
     formats:
       default: "%Y-%m-%d"
       short: "%b %d"
       long: "%B %d, %Y"
+
+  time:
+    formats:
+      default: "%d %B %Y %H:%M:%S"
+      short: "%d %b %H:%M"
+      long: "%A %d %B %Y %H:%M"
 
     day_names: [Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday]
     abbr_day_names: [Sun, Mon, Tue, Wed, Thu, Fri, Sat]
@@ -46,7 +53,7 @@ test:
       bool_true: 'True'
       bool_false: 'False'      
   
-  users:
+  sorting_table_for_users:
     index:
       table_caption: 'Quick Caption'
       edit: 'Edit'

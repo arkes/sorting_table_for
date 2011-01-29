@@ -1,19 +1,19 @@
 # encoding: utf-8
 
 require 'spec_helper'
-require File.expand_path(File.dirname(__FILE__) + '/../fixtures/user')
+require File.expand_path(File.dirname(__FILE__) + '/../fixtures/sorting_table_for_user')
 
 include SortingTableForSpecHelper
 
 describe SortingTableFor, :type => :helper do
 
   before :all do
-    (Tools::rails3?) ? routes_rails3 : routes_rails2
+    (SortingTableFor::Tools::rails3?) ? routes_rails3 : routes_rails2
   end
 
   before :each do
-    @users = User.all
-    helper.stub!(:params).and_return({ :controller => 'users', :action => 'index' })
+    @users = SortingTableForUser.all
+    helper.stub!(:params).and_return({ :controller => 'sorting_table_for_users', :action => 'index' })
     helper.output_buffer = ''
   end
   
@@ -24,7 +24,7 @@ describe SortingTableFor, :type => :helper do
         html = table.columns
         html.should have_comp_tag("tbody", :count => 1)
         html.should have_comp_tag("tr", :count => (@users.size + 1))
-        html.should have_comp_tag("td", :count => (@users.size * (User.content_columns.size + 2)) + 1)
+        html.should have_comp_tag("td", :count => (@users.size * (SortingTableForUser.content_columns.size + 2)) + 1)
       end
     end
     
@@ -36,7 +36,7 @@ describe SortingTableFor, :type => :helper do
     
     it "should add colspan for total entries" do
       helper.sorting_table_for(@users) do |table|
-        table.columns.should match("<td colspan=\"" + (User.content_columns.size + 2).to_s  + "\">")
+        table.columns.should match("<td colspan=\"" + (SortingTableForUser.content_columns.size + 2).to_s  + "\">")
       end
     end
   
@@ -48,7 +48,7 @@ describe SortingTableFor, :type => :helper do
     
     it "should add colspan for total entries" do
       helper.sorting_table_for(@users) do |table|
-        table.columns.should match("<td colspan=\"" + (User.content_columns.size + 2).to_s  + "\">")
+        table.columns.should match("<td colspan=\"" + (SortingTableForUser.content_columns.size + 2).to_s  + "\">")
       end
     end
     
@@ -88,7 +88,7 @@ describe SortingTableFor, :type => :helper do
     it "should have option colspan" do
       table_html = helper.sorting_table_for(@users) do |table|
         html = table.columns :colspan => 5
-        html.should have_comp_tag('td[colspan="5"]', :count => (@users.size * User.content_columns.size))
+        html.should have_comp_tag('td[colspan="5"]', :count => (@users.size * SortingTableForUser.content_columns.size))
       end
     end
     
@@ -350,7 +350,7 @@ describe SortingTableFor, :type => :helper do
       helper.sorting_table_for(@users) do |table|
         html = table.columns
         html.should_not match("Total Entries " + @users.size.to_s)
-        html.should_not match("<td colspan=\"" + (User.content_columns.size + 2).to_s  + "\">")        
+        html.should_not match("<td colspan=\"" + (SortingTableForUser.content_columns.size + 2).to_s  + "\">")        
       end
     end
     
@@ -359,7 +359,7 @@ describe SortingTableFor, :type => :helper do
       helper.sorting_table_for(@users) do |table|
         html = table.columns
         html.should match("Total Entries " + @users.size.to_s)
-        html.should match("<td colspan=\"" + (User.content_columns.size + 2).to_s  + "\">")        
+        html.should match("<td colspan=\"" + (SortingTableForUser.content_columns.size + 2).to_s  + "\">")        
       end
     end    
     
@@ -386,7 +386,7 @@ describe SortingTableFor, :type => :helper do
     it "should edit default actions" do
       SortingTableFor::TableBuilder.default_actions = [:show, :edit_password, :edit, :delete]
       helper.sorting_table_for(@users) do |table|
-        table.columns.should have_comp_tag("td", :count => (@users.size * (User.content_columns.size + 4)) + 1)
+        table.columns.should have_comp_tag("td", :count => (@users.size * (SortingTableForUser.content_columns.size + 4)) + 1)
       end
     end
     

@@ -1,4 +1,4 @@
-class User < ActiveRecord::Base
+class SortingTableForUser < ActiveRecord::Base
   if ::SortingTableFor::Tools::rails3?
     scope :good_position, :conditions => 'position > 3'
     scope :set_limit, lambda { |limit| { :limit => limit } }
@@ -10,7 +10,7 @@ class User < ActiveRecord::Base
 end
 
 20.times do |n|
-  User.create( 
+  SortingTableForUser.create( 
       :username => "my_usename_#{n}",
       :firstname => "my_firstname_#{n}",
       :lastname => "my_lastname_#{n}",

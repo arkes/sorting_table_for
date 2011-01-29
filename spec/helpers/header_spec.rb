@@ -1,19 +1,19 @@
 # encoding: utf-8
 
 require 'spec_helper'
-require File.expand_path(File.dirname(__FILE__) + '/../fixtures/user')
+require File.expand_path(File.dirname(__FILE__) + '/../fixtures/sorting_table_for_user')
 
 include SortingTableForSpecHelper
 
 describe SortingTableFor, :type => :helper do
 
   before :all do
-    (Tools::rails3?) ? routes_rails3 : routes_rails2
+    (SortingTableFor::Tools::rails3?) ? routes_rails3 : routes_rails2
   end
   
   before :each do
-    @users = User.all
-    helper.stub!(:params).and_return({ :controller => 'users', :action => 'index' })
+    @users = SortingTableForUser.all
+    helper.stub!(:params).and_return({ :controller => 'sorting_table_for_users', :action => 'index' })
     helper.output_buffer = ''
   end
   
@@ -61,7 +61,7 @@ describe SortingTableFor, :type => :helper do
       it "should have option colspan" do
         table_html = helper.sorting_table_for(@users) do |table|
           html = table.headers :colspan => 5
-          html.should have_comp_tag('th[colspan="5"]', :count => User.content_columns.size)          
+          html.should have_comp_tag('th[colspan="5"]', :count => SortingTableForUser.content_columns.size)          
         end
       end      
 
@@ -385,7 +385,7 @@ describe SortingTableFor, :type => :helper do
       it "should edit default actions" do
         SortingTableFor::TableBuilder.default_actions = [:show, :edit_password, :edit, :delete]
         helper.sorting_table_for(@users) do |table|
-          table.headers.should have_comp_tag("th", :count => User.column_names.size + 3)
+          table.headers.should have_comp_tag("th", :count => SortingTableForUser.column_names.size + 3)
         end
       end
       

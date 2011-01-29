@@ -1,6 +1,6 @@
 ActiveRecord::Schema.define(:version => 0) do
 
-  create_table :users, :force => true do |t|
+  create_table :sorting_table_for_users, :force => true do |t|
     
     t.string    :username
     t.string    :firstname
