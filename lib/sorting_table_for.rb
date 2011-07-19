@@ -1,6 +1,8 @@
 # encoding: utf-8
 
 require 'sorting_table_for/table_builder'
+require 'sorting_table_for/format_line'
+require 'sorting_table_for/format_cell'
 require 'sorting_table_for/i18n'
 require 'sorting_table_for/tools'
 
