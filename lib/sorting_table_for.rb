@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+require 'sorting_table_for/model_scope'
 require 'sorting_table_for/table_builder'
 require 'sorting_table_for/format_line'
 require 'sorting_table_for/format_cell'
