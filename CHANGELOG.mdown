@@ -1,5 +1,9 @@
 # CHANGELOG
 
+### Version 0.2.1 _(July 20, 2011)_
+
+* Fix bug with sorting_table was not loading in ActiveRecord
+
 ### Version 0.2.0 _(November 14, 2010)_
 
 * Add footers and footer
