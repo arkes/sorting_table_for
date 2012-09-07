@@ -1,7 +1,7 @@
 require 'spec_helper'
 require File.expand_path(File.dirname(__FILE__) + '/../fixtures/sorting_table_for_user')
 
-describe SortingTableModelScope do
+describe SortingTableFor::ModelScope do
   
   describe "# default usage" do
     

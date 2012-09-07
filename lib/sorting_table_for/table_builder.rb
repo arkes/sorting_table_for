@@ -8,12 +8,12 @@ module SortingTableFor
     
     include ::ActionView::Helpers
     
-    class_inheritable_accessor :reserved_columns, :currency_columns,
-                               :default_boolean, :show_total_entries,
-                               :params_sort_table, :i18n_default_format_date,
-                               :html_sorting_class, :default_actions,
-                               :i18n_default_scope, :i18n_add_header_action_scope,
-                               :i18n_add_footer_action_scope
+    class_attribute   :reserved_columns, :currency_columns,
+                      :default_boolean, :show_total_entries,
+                      :params_sort_table, :i18n_default_format_date,
+                      :html_sorting_class, :default_actions,
+                      :i18n_default_scope, :i18n_add_header_action_scope,
+                      :i18n_add_footer_action_scope
     
     self.reserved_columns             = [:id, :password, :salt]
     self.currency_columns             = [:price, :total_price, :currency, :money]

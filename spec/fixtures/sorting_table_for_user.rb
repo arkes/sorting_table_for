@@ -1,5 +1,8 @@
 class SortingTableForUser < ActiveRecord::Base
   if ::SortingTableFor::Tools::rails3?
+    attr_accessible :username, :firstname, :lastname, :position,
+                    :salary, :price, :active, :created_at, :updated_at
+    
     scope :good_position, :conditions => 'position > 3'
     scope :set_limit, lambda { |limit| { :limit => limit } }
   else
