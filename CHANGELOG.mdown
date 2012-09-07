@@ -1,5 +1,9 @@
 # CHANGELOG
 
+### Version 0.2.2 _(September 07, 2012)_
+
+* Fix problems with rails 3.2
+
 ### Version 0.2.1 _(July 20, 2011)_
 
 * Fix bug with sorting_table was not loading in ActiveRecord

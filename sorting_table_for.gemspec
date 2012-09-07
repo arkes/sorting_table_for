@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name = "sorting_table_for"
-  s.version = "0.2.1"
-  s.date = "2010-11-14"
+  s.version = "0.2.2"
+  s.date = "2012-09-07"
   s.author = "Thomas Floch"
   s.email = "thomas.floch@gmail.com"
   s.homepage = "http://github.com/arkownz/sorting_table_for"
