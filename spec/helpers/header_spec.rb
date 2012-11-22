@@ -8,7 +8,7 @@ include SortingTableForSpecHelper
 describe SortingTableFor, :type => :helper do
 
   before :all do
-    (SortingTableFor::Tools::rails3?) ? routes_rails3 : routes_rails2
+    routes_rails
   end
   
   before :each do
@@ -309,11 +309,7 @@ describe SortingTableFor, :type => :helper do
               I18n.t(:my_test, :scope => :fake_scope)
             end
           end
-          if SortingTableFor::Tools::rails3?
-            html.should have_comp_tag("th:nth-child(1)", :text => '')
-          else
-            html.should have_comp_tag("th:nth-child(1)", :text => 'username')
-          end
+          html.should have_comp_tag("th:nth-child(1)", :text => '')
           html.should have_comp_tag("th:nth-child(2)", :text => 'firstname')
           html.should have_comp_tag("th:nth-child(3)", :text => 'Hello')
         end

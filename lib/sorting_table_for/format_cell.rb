@@ -102,13 +102,9 @@ module SortingTableFor
   
     # Create the link based on object
     # Set an ajax link if option link_remote is set to true
-    # Compatible with rails 2 and 3.
     def create_link_to(block, url, remote, method = nil, confirm = nil)
-      if remote and Tools::rails3?
+      if remote
         return link_to(block, url, :method => method, :confirm => confirm, :remote => true)
-      elsif remote
-        method = :get if method.nil?
-        return link_to_remote(block, { :url => url, :method => method, :confirm => confirm })
       end
       link_to(block, url, :method => method, :confirm => confirm)
     end

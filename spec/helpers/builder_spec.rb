@@ -8,7 +8,7 @@ include SortingTableForSpecHelper
 describe SortingTableFor, :type => :helper do
   
   before :all do
-    (SortingTableFor::Tools::rails3?) ? routes_rails3 : routes_rails2
+    routes_rails
   end
   
   before :each do

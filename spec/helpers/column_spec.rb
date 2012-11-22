@@ -8,7 +8,7 @@ include SortingTableForSpecHelper
 describe SortingTableFor, :type => :helper do
 
   before :all do
-    (SortingTableFor::Tools::rails3?) ? routes_rails3 : routes_rails2
+    routes_rails
   end
 
   before :each do
@@ -153,11 +153,7 @@ describe SortingTableFor, :type => :helper do
     it "should add remote on link" do
       helper.sorting_table_for(@users, :link_remote => true) do |table|
         html = table.columns :username, :actions => :edit
-        if SortingTableFor::Tools::rails3?
-          html.should have_comp_tag("tr:nth-child(2) td:nth-child(2) a[data-remote]")
-        else
-          html.should have_comp_tag("tr:nth-child(2) td:nth-child(2) a[onclick]")
-        end
+        html.should have_comp_tag("tr:nth-child(2) td:nth-child(2) a[data-remote]")
       end            
     end
     
@@ -285,11 +281,7 @@ describe SortingTableFor, :type => :helper do
             'hello'
           end
         end
-        if SortingTableFor::Tools::rails3?
-          html.should have_comp_tag('tr:nth-child(2) td:nth-child(1)', :text => '')
-        else
-          html.should have_comp_tag('tr:nth-child(2) td:nth-child(1)', :text => 'username')
-        end
+        html.should have_comp_tag('tr:nth-child(2) td:nth-child(1)', :text => '')
         html.should have_comp_tag('tr:nth-child(2) td:nth-child(2)', :text => 'hello')
       end
     end

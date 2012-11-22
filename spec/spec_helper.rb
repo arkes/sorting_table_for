@@ -1,18 +1,11 @@
-require 'rubygems'
+# This file is copied to spec/ when you run 'rails generate rspec:install'
+ENV["RAILS_ENV"] ||= 'test'
+require File.expand_path("../../config/environment", __FILE__)
+require 'rspec/rails'
+require 'rspec/autorun'
 
-begin
-  require File.dirname(__FILE__) + '/../../../../spec/spec_helper'
-rescue LoadError
-  puts "You need to install rspec in your base app"
-  exit
-end
-
-puts "Launching spec for Rails #{Rails.version}"
-
-if ::SortingTableFor::Tools::rails3?
-  RSpec.configure do |config|
-    config.include Webrat::Matchers, :type => :views 
-  end
+RSpec.configure do |config|
+  config.include Webrat::Matchers, :type => :views 
 end
 
 ##
@@ -34,11 +27,7 @@ end
 ## Load I18n locales
 ##
 
-if ::SortingTableFor::Tools::rails3?
-  I18n.load_path = Dir[File.join(File.expand_path(File.dirname(__FILE__)), 'locales', 'test_rails3.yml')]
-else
-  I18n.load_path = Dir[File.join(File.expand_path(File.dirname(__FILE__)), 'locales', 'test.yml')]
-end
+I18n.load_path = Dir[File.join(File.expand_path(File.dirname(__FILE__)), 'locales', 'test_rails.yml')]
 I18n.locale = :test
 I18n.default_locale = :test
 
@@ -46,7 +35,7 @@ I18n.default_locale = :test
 ## Init plugin
 ##
 
-require File.join(File.dirname(__FILE__), '..', 'init.rb')
+#require File.join(File.dirname(__FILE__), '..', 'init.rb')
 
 ##
 ## Spec Helper
@@ -56,14 +45,7 @@ module SortingTableForSpecHelper
   include ActiveSupport
   include SortingTableFor
   
-  def routes_rails2
-    ActionController::Routing::Routes.clear!
-      ActionController::Routing::Routes.draw do |map|
-        map.resources :sorting_table_for_users, :member => { :edit_password => :get }
-    end
-  end
-  
-  def routes_rails3
+  def routes_rails
     Rails.application.routes.clear!
     Rails.application.routes.draw do
       resources :sorting_table_for_users do
@@ -75,14 +57,11 @@ module SortingTableForSpecHelper
   end
   
   def have_comp_tag(selector, options = {})
-    if ::SortingTableFor::Tools::rails3?
-      if options.has_key? :text
-        options[:content] = options[:text]
-        options.delete :text
-      end
-      return have_selector(selector, options)
+    if options.has_key? :text
+      options[:content] = options[:text]
+      options.delete :text
     end
-    have_tag(selector, options)
+    return have_selector(selector, options)
   end
   
 end
