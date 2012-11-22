@@ -1,5 +1,11 @@
 # CHANGELOG
 
+### Version 0.3.0 _(November 22, 2012)_
+
+* Only works with rails 3 now
+* Fix pending specs
+* Fix doc and links
+
 ### Version 0.2.2 _(September 07, 2012)_
 
 * Fix problems with rails 3.2
