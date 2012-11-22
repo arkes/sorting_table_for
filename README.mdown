@@ -6,18 +6,18 @@ SortingTableFor is a Rails TableBuilder made to easily create table or sort a ta
 
 ## Infos
 
-- It's Rails 2 and 3 compatible
+- It's Rails 2 and Rails 3 compatible
 - I18n compatible
 
 ## Installation
 
 In Rails 3, add this to your Gemfile.
 
-    gem "sorting_table_for"
+    gem "sorting_table_for", '> 0.2.1'
 
 In Rails 2, add this to your environment.rb file.
 
-    config.gem "sorting_table_for"
+    config.gem "sorting_table_for", '0.2.2'
 
 Alternatively, you can install it as a plugin.
 
