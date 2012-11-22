@@ -13,7 +13,7 @@ SortingTableFor is a Rails TableBuilder made to easily create table or sort a ta
 
 In Rails 3, add this to your Gemfile.
 
-    gem "sorting_table_for", '> 0.2.1'
+    gem "sorting_table_for", '~> 0.3.0'
 
 In Rails 2, add this to your environment.rb file.
 
