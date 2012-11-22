@@ -375,20 +375,30 @@ describe SortingTableFor, :type => :helper do
       end
     end
     
-    it "should edit default actions" do
+    it "should edit create actions" do
       SortingTableFor::TableBuilder.default_actions = [:show, :edit_password, :edit, :delete]
       helper.sorting_table_for(@users) do |table|
         table.columns.should have_selector("td", :count => (@users.size * (SortingTableForUser.content_columns.size + 4)) + 1)
       end
     end
     
-    it "should edit default actions" do
-      pending('should check if the links are valids')
+    it "links should be correct by default" do
       SortingTableFor::TableBuilder.default_actions = [:show, :edit_password, :edit, :delete]
       helper.sorting_table_for(@users) do |table|
+        html = table.columns
+        html.should match("<a href=\"/sorting_table_for_users/#{@users.first.id}\"")
+        html.should match("<a href=\"/sorting_table_for_users/#{@users.first.id}/edit\"")
+        html.should match("<a href=\"/sorting_table_for_users/#{@users.first.id}\" data-confirm=\"translation missing: test.sorting_table_for_users.index.confirm_delete\" data-method=\"delete\" rel=\"nofollow\">")
       end
     end    
     
+    it "should work with custom links" do
+      SortingTableFor::TableBuilder.default_actions = [:show, :edit_password, :edit, :delete]
+      helper.sorting_table_for(@users) do |table|
+        html = table.columns
+        html.should match("<a href=\"/sorting_table_for_users/#{@users.first.id}/edit_password\"")
+      end
+    end
+    
   end
-  ## Add spec for links
 end

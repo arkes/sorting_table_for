@@ -32,12 +32,6 @@ I18n.locale = :test
 I18n.default_locale = :test
 
 ##
-## Init plugin
-##
-
-#require File.join(File.dirname(__FILE__), '..', 'init.rb')
-
-##
 ## Spec Helper
 ##
 

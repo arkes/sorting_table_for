@@ -12,6 +12,7 @@ describe SortingTableFor, :type => :helper do
   end
   
   before :each do
+    SortingTableFor::TableBuilder.default_actions = [:edit, :delete]
     @users = SortingTableForUser.all
     helper.stub!(:params).and_return({ :controller => 'sorting_table_for_users', :action => 'index' })
     helper.output_buffer = ''
@@ -372,9 +373,9 @@ describe SortingTableFor, :type => :helper do
       end
       
       it "should edit params sort table" do
-        pending("Check if the link is edit")
         SortingTableFor::TableBuilder.params_sort_table = :hello_table
         helper.sorting_table_for(@users) do |table|
+          table.headers.include?("<a href=\"/sorting_table_for_users?hello_table%5Busername%5D=asc\">").should be_true
         end        
       end
     
@@ -382,13 +383,6 @@ describe SortingTableFor, :type => :helper do
         SortingTableFor::TableBuilder.default_actions = [:show, :edit_password, :edit, :delete]
         helper.sorting_table_for(@users) do |table|
           table.headers.should have_selector("th", :count => SortingTableForUser.column_names.size + 3)
-        end
-      end
-      
-      it "should edit default actions" do
-        pending('check if the link is valid')
-        SortingTableFor::TableBuilder.default_actions = [:show, :edit_password]
-        helper.sorting_table_for(@users) do |table|
         end
       end
       
