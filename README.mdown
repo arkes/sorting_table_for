@@ -21,7 +21,7 @@ In Rails 2, add this to your environment.rb file.
 
 Alternatively, you can install it as a plugin.
 
-    rails plugin install git://github.com/arkownz/sorting_table_for.git
+    rails plugin install git://github.com/arkes/sorting_table_for.git
 
 ## Usage
 
@@ -241,7 +241,7 @@ There are some options that you can modify in your initiatilizer
 
 [_Here an exemple of css file_][]
 
-Copyright (c) 2010 arkownz (Thomas Floch), released under the MIT license
+Copyright (c) 2010 arkes (Thomas Floch), released under the MIT license
 
-[_see the initializer file exemple for more explanation_]: http://github.com/arkownz/sorting_table_for/blob/master/assets/config/initializers/sorting_table_for.rb
-[_Here an exemple of css file_]: http://github.com/arkownz/sorting_table_for/blob/master/assets/public/stylesheets/sorting_table_for.css
+[_see the initializer file exemple for more explanation_]: http://github.com/arkes/sorting_table_for/blob/master/assets/config/initializers/sorting_table_for.rb
+[_Here an exemple of css file_]: http://github.com/arkes/sorting_table_for/blob/master/assets/public/stylesheets/sorting_table_for.css

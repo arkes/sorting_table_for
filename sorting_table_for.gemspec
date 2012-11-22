@@ -4,7 +4,7 @@ Gem::Specification.new do |s|
   s.date = "2012-09-07"
   s.author = "Thomas Floch"
   s.email = "thomas.floch@gmail.com"
-  s.homepage = "http://github.com/arkownz/sorting_table_for"
+  s.homepage = "http://github.com/arkes/sorting_table_for"
   s.summary = "A Rails table builder made to easily create and sort a table"
   s.description = "A Rails table builder made to easily create table or sort a table. The syntax is simple to write and easy to read."
   
