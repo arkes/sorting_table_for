@@ -56,12 +56,4 @@ module SortingTableForSpecHelper
     end
   end
   
-  def have_comp_tag(selector, options = {})
-    if options.has_key? :text
-      options[:content] = options[:text]
-      options.delete :text
-    end
-    return have_selector(selector, options)
-  end
-  
 end

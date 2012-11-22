@@ -22,7 +22,7 @@ describe SortingTableFor, :type => :helper do
     it "should set nothing" do
       helper.sorting_table_for(@users) do |table|
         html = table.footers
-        html.should_not have_comp_tag("tfoot")
+        html.should_not have_selector("tfoot")
       end
     end
     
@@ -33,50 +33,50 @@ describe SortingTableFor, :type => :helper do
     it "should set a footer with argument" do
       helper.sorting_table_for(@users) do |table|
         html = table.footers 'hello'
-        html.should have_comp_tag("tfoot", :count => 1)
-        html.should have_comp_tag("tr", :count => 1)
-        html.should have_comp_tag("td", :count => 1)        
+        html.should have_selector("tfoot", :count => 1)
+        html.should have_selector("tr", :count => 1)
+        html.should have_selector("td", :count => 1)        
       end
     end
 
     it "should set a footer with multiple arguments" do
       helper.sorting_table_for(@users) do |table|
         html = table.footers 'hello', 'hi', 'footer'
-        html.should have_comp_tag("tfoot", :count => 1)
-        html.should have_comp_tag("tr", :count => 1)
-        html.should have_comp_tag("td", :count => 3)
+        html.should have_selector("tfoot", :count => 1)
+        html.should have_selector("tr", :count => 1)
+        html.should have_selector("td", :count => 3)
       end
     end
 
     it "should set i18n" do
       helper.sorting_table_for(@users) do |table|
         html = table.footers :username
-        html.should have_comp_tag('td', :text => 'UserFoot')
+        html.should have_selector('td', :content => 'UserFoot')
       end
     end
 
     it "should set i18n for multiple arguments" do
       helper.sorting_table_for(@users) do |table|
         html = table.footers :username, :price
-        html.should have_comp_tag('td:nth-child(1)', :text => 'UserFoot')
-        html.should have_comp_tag('td:nth-child(2)', :text => 'PriceFoot')
+        html.should have_selector('td:nth-child(1)', :content => 'UserFoot')
+        html.should have_selector('td:nth-child(2)', :content => 'PriceFoot')
       end
     end
 
     it "should works with colspan" do
       helper.sorting_table_for(@users) do |table|
         html = table.footers :username, :colspan => 5
-        html.should have_comp_tag('td[colspan="5"]')
+        html.should have_selector('td[colspan="5"]')
       end
     end
 
     it "should be customize with html" do
       table_html = helper.sorting_table_for(@users, :html => { :class => 'table_class', :id => 'table_id' }) do |table|
         html = table.footers :username, :html => { :class => 'header_class', :id => 'header_id' }
-        html.should have_comp_tag("tr[class=header_class][id=header_id]")
+        html.should have_selector("tr[class=header_class][id=header_id]")
       end
       helper.output_buffer.concat(table_html)
-      helper.output_buffer.should have_comp_tag("table[class='table_class sorting_table_for'][id=table_id]")
+      helper.output_buffer.should have_selector("table[class='table_class sorting_table_for'][id=table_id]")
     end
 
   end
@@ -88,9 +88,9 @@ describe SortingTableFor, :type => :helper do
         html = table.footers do 
           table.footer 'hello'
         end
-        html.should have_comp_tag("tfoot", :count => 1)
-        html.should have_comp_tag("tr", :count => 1)
-        html.should have_comp_tag("td", :count => 1)        
+        html.should have_selector("tfoot", :count => 1)
+        html.should have_selector("tr", :count => 1)
+        html.should have_selector("td", :count => 1)        
       end
     end
 
@@ -101,9 +101,9 @@ describe SortingTableFor, :type => :helper do
           table.footer 'hi'
           table.footer 'footer'
         end
-        html.should have_comp_tag("tfoot", :count => 1)
-        html.should have_comp_tag("tr", :count => 1)
-        html.should have_comp_tag("td", :count => 3)
+        html.should have_selector("tfoot", :count => 1)
+        html.should have_selector("tr", :count => 1)
+        html.should have_selector("td", :count => 3)
       end
     end
 
@@ -112,7 +112,7 @@ describe SortingTableFor, :type => :helper do
         html = table.footers do
           table.footer :username
         end
-        html.should have_comp_tag('td', :text => 'UserFoot')
+        html.should have_selector('td', :content => 'UserFoot')
       end
     end
 
@@ -122,8 +122,8 @@ describe SortingTableFor, :type => :helper do
           table.footer :username
           table.footer :price
         end
-        html.should have_comp_tag('td:nth-child(1)', :text => 'UserFoot')
-        html.should have_comp_tag('td:nth-child(2)', :text => 'PriceFoot')
+        html.should have_selector('td:nth-child(1)', :content => 'UserFoot')
+        html.should have_selector('td:nth-child(2)', :content => 'PriceFoot')
       end
     end
 
@@ -132,7 +132,7 @@ describe SortingTableFor, :type => :helper do
         html = table.footers do 
           table.footer :username, :colspan => 5
         end
-        html.should have_comp_tag('td[colspan="5"]')
+        html.should have_selector('td[colspan="5"]')
       end
     end
 
@@ -143,13 +143,13 @@ describe SortingTableFor, :type => :helper do
           table.footer :firstname, :html => { :class => 'cell_2_class', :id => 'cell_2_id', :title => 'hello_2' }
           table.footer 'hello', :html => { :class => 'cell_3_class', :id => 'cell_3_id', :title => 'hello_3' }
         end
-        html.should have_comp_tag("tr[class=header_class][id=header_id]")
-        html.should have_comp_tag("td:nth-child(1)[class='cell_1_class'][id=cell_1_id][title=hello_1]")
-        html.should have_comp_tag("td:nth-child(2)[class='cell_2_class'][id=cell_2_id][title=hello_2]")
-        html.should have_comp_tag("td:nth-child(3)[class=cell_3_class][id=cell_3_id][title=hello_3]")
+        html.should have_selector("tr[class=header_class][id=header_id]")
+        html.should have_selector("td:nth-child(1)[class='cell_1_class'][id=cell_1_id][title=hello_1]")
+        html.should have_selector("td:nth-child(2)[class='cell_2_class'][id=cell_2_id][title=hello_2]")
+        html.should have_selector("td:nth-child(3)[class=cell_3_class][id=cell_3_id][title=hello_3]")
       end
       helper.output_buffer.concat(table_html)
-      helper.output_buffer.should have_comp_tag("table[class='table_class sorting_table_for'][id=table_id]")
+      helper.output_buffer.should have_selector("table[class='table_class sorting_table_for'][id=table_id]")
     end
 
   end
@@ -163,9 +163,9 @@ describe SortingTableFor, :type => :helper do
             'hello'
           end
         end
-        html.should have_comp_tag("tfoot", :count => 1)
-        html.should have_comp_tag("tr", :count => 1)
-        html.should have_comp_tag("td", :count => 1)        
+        html.should have_selector("tfoot", :count => 1)
+        html.should have_selector("tr", :count => 1)
+        html.should have_selector("td", :count => 1)        
       end
     end
 
@@ -182,9 +182,9 @@ describe SortingTableFor, :type => :helper do
             'footer'
           end
         end
-        html.should have_comp_tag("tfoot", :count => 1)
-        html.should have_comp_tag("tr", :count => 1)
-        html.should have_comp_tag("td", :count => 3)
+        html.should have_selector("tfoot", :count => 1)
+        html.should have_selector("tr", :count => 1)
+        html.should have_selector("td", :count => 3)
       end
     end
 
@@ -195,7 +195,7 @@ describe SortingTableFor, :type => :helper do
             :username
           end
         end
-        html.should_not have_comp_tag('td', :text => 'UserFoot')
+        html.should_not have_selector('td', :content => 'UserFoot')
       end
     end
 
@@ -209,8 +209,8 @@ describe SortingTableFor, :type => :helper do
             :price
           end
         end
-        html.should_not have_comp_tag('td:nth-child(1)', :text => 'UserFoot')
-        html.should_not have_comp_tag('td:nth-child(2)', :text => 'PriceFoot')
+        html.should_not have_selector('td:nth-child(1)', :content => 'UserFoot')
+        html.should_not have_selector('td:nth-child(2)', :content => 'PriceFoot')
       end
     end
 
@@ -221,7 +221,7 @@ describe SortingTableFor, :type => :helper do
             :username
           end
         end
-        html.should have_comp_tag('td[colspan="5"]')
+        html.should have_selector('td[colspan="5"]')
       end
     end
 
@@ -238,13 +238,13 @@ describe SortingTableFor, :type => :helper do
             'hello'
           end
         end
-        html.should have_comp_tag("tr[class=header_class][id=header_id]")
-        html.should have_comp_tag("td:nth-child(1)[class='cell_1_class'][id=cell_1_id][title=hello_1]")
-        html.should have_comp_tag("td:nth-child(2)[class='cell_2_class'][id=cell_2_id][title=hello_2]")
-        html.should have_comp_tag("td:nth-child(3)[class=cell_3_class][id=cell_3_id][title=hello_3]")
+        html.should have_selector("tr[class=header_class][id=header_id]")
+        html.should have_selector("td:nth-child(1)[class='cell_1_class'][id=cell_1_id][title=hello_1]")
+        html.should have_selector("td:nth-child(2)[class='cell_2_class'][id=cell_2_id][title=hello_2]")
+        html.should have_selector("td:nth-child(3)[class=cell_3_class][id=cell_3_id][title=hello_3]")
       end
       helper.output_buffer.concat(table_html)
-      helper.output_buffer.should have_comp_tag("table[class='table_class sorting_table_for'][id=table_id]")
+      helper.output_buffer.should have_selector("table[class='table_class sorting_table_for'][id=table_id]")
     end
 
   end
@@ -260,8 +260,8 @@ describe SortingTableFor, :type => :helper do
       SortingTableFor::TableBuilder.i18n_add_footer_action_scope = :header
       helper.sorting_table_for(@users) do |table|
         html = table.footers :username, :price
-        html.should have_comp_tag('td:nth-child(1)', :text => 'Usernames')
-        html.should have_comp_tag('td:nth-child(2)', :text => 'Prices')
+        html.should have_selector('td:nth-child(1)', :content => 'Usernames')
+        html.should have_selector('td:nth-child(2)', :content => 'Prices')
       end
     end
     

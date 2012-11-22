@@ -24,42 +24,42 @@ describe SortingTableFor, :type => :helper do
       it "should set caption tag" do
         helper.sorting_table_for(@users) do |table|
           html = table.caption
-          html.should have_comp_tag("caption", :count => 1)
+          html.should have_selector("caption", :count => 1)
         end
       end
     
       it "should set caption tag with arguments" do
         helper.sorting_table_for(@users) do |table|
           html = table.caption 'hello'
-          html.should have_comp_tag("caption", :text => 'hello')
+          html.should have_selector("caption", :content => 'hello')
         end
       end
     
       it "should set caption tag with arguments and option position left" do
         helper.sorting_table_for(@users) do |table|
           html = table.caption 'hello', :position => :left
-          html.should have_comp_tag("caption[align=left]")
+          html.should have_selector("caption[align=left]")
         end
       end
       
       it "should set caption tag with arguments and option position bottom" do
         helper.sorting_table_for(@users) do |table|
           html = table.caption 'hello', :position => :bottom
-          html.should have_comp_tag("caption[align=bottom]")
+          html.should have_selector("caption[align=bottom]")
         end
       end
       
       it "should works with html options" do
         helper.sorting_table_for(@users) do |table|
           html = table.caption 'hello', :html => {:class => 'my_class', :id => 'my_id', :title => 'my_title'}
-          html.should have_comp_tag("caption[class=my_class][id=my_id][title=my_title]")
+          html.should have_selector("caption[class=my_class][id=my_id][title=my_title]")
         end
       end
       
       it "should works with html options and position option" do
         helper.sorting_table_for(@users) do |table|
           html = table.caption 'hello', :position => :right, :html => {:class => 'my_class', :id => 'my_id', :title => 'my_title'}
-          html.should have_comp_tag("caption[class=my_class][id=my_id][title=my_title][align=right]")
+          html.should have_selector("caption[class=my_class][id=my_id][title=my_title][align=right]")
         end
       end
       
@@ -70,7 +70,7 @@ describe SortingTableFor, :type => :helper do
       it "should set caption tag" do
         helper.sorting_table_for(@users) do |table|
           html = table.caption {}
-          html.should have_comp_tag("caption", :count => 1)
+          html.should have_selector("caption", :count => 1)
         end
       end
       
@@ -79,7 +79,7 @@ describe SortingTableFor, :type => :helper do
           html = table.caption do
             'hello'
           end
-          html.should have_comp_tag("caption", :text => 'hello')
+          html.should have_selector("caption", :content => 'hello')
         end
       end
     
@@ -88,7 +88,7 @@ describe SortingTableFor, :type => :helper do
           html = table.caption :position => :left do
             'hello'
           end 
-          html.should have_comp_tag("caption[align=left]")
+          html.should have_selector("caption[align=left]")
         end
       end
  
@@ -97,7 +97,7 @@ describe SortingTableFor, :type => :helper do
           html = table.caption :position => :bottom do
             'hello'
           end
-          html.should have_comp_tag("caption[align=bottom]")
+          html.should have_selector("caption[align=bottom]")
         end
       end
       
@@ -106,7 +106,7 @@ describe SortingTableFor, :type => :helper do
           html = table.caption :html => {:class => 'my_class', :id => 'my_id', :title => 'my_title'} do
             'hello'
           end
-          html.should have_comp_tag("caption[class=my_class][id=my_id][title=my_title]")
+          html.should have_selector("caption[class=my_class][id=my_id][title=my_title]")
         end
       end
       
@@ -115,7 +115,7 @@ describe SortingTableFor, :type => :helper do
           html = table.caption :position => :right, :html => {:class => 'my_class', :id => 'my_id', :title => 'my_title'} do
             'hello'
           end
-          html.should have_comp_tag("caption[class=my_class][id=my_id][title=my_title][align=right]")
+          html.should have_selector("caption[class=my_class][id=my_id][title=my_title][align=right]")
         end
       end
       
@@ -127,36 +127,36 @@ describe SortingTableFor, :type => :helper do
     it "should set caption tag with i18n translation" do
       helper.sorting_table_for(@users) do |table|
         html = table.caption
-        html.should have_comp_tag("caption", :count => 1)
-        html.should have_comp_tag("caption", :text => 'Quick Caption')
+        html.should have_selector("caption", :count => 1)
+        html.should have_selector("caption", :content => 'Quick Caption')
       end
     end
   
     it "should set caption tag with arguments and option position left" do
       helper.sorting_table_for(@users) do |table|
         html = table.caption :position => :left
-        html.should have_comp_tag("caption[align=left]")
+        html.should have_selector("caption[align=left]")
       end
     end
     
     it "should set caption tag with arguments and option position bottom" do
       helper.sorting_table_for(@users) do |table|
         html = table.caption :position => :bottom
-        html.should have_comp_tag("caption[align=bottom]")
+        html.should have_selector("caption[align=bottom]")
       end
     end
     
     it "should works with html options" do
       helper.sorting_table_for(@users) do |table|
         html = table.caption :html => {:class => 'my_class', :id => 'my_id', :title => 'my_title'}
-        html.should have_comp_tag("caption[class=my_class][id=my_id][title=my_title]")
+        html.should have_selector("caption[class=my_class][id=my_id][title=my_title]")
       end
     end
     
     it "should works with html options and position option" do
       helper.sorting_table_for(@users) do |table|
         html = table.caption :position => :right, :html => {:class => 'my_class', :id => 'my_id', :title => 'my_title'}
-        html.should have_comp_tag("caption[class=my_class][id=my_id][title=my_title][align=right]")
+        html.should have_selector("caption[class=my_class][id=my_id][title=my_title][align=right]")
       end
     end
     
